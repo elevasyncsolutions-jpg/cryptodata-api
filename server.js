@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
-const http = require('http');
-const { URL } = require('url');
 
 const app = express();
 app.use(cors());
@@ -13,170 +11,238 @@ const API_KEY = process.env.API_KEY || 'free-tier';
 
 function authenticate(req, res, next) {
   const key = req.headers['x-api-key'] || req.query.key;
-  if (key === API_KEY || API_KEY === 'free-tier') {
-    return next();
-  }
+  if (key === API_KEY || API_KEY === 'free-tier') return next();
   return res.status(401).json({ error: 'Invalid API key' });
 }
 
-function fetchPage(url) {
+function fetch(url) {
   return new Promise((resolve, reject) => {
-    const client = url.startsWith('https') ? https : http;
-    client.get(url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DataAPI/1.0)' } }, (res) => {
+    https.get(url, { headers: { 'User-Agent': 'CryptoAPI/1.0' } }, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
-      res.on('end', () => resolve({ status: res.statusCode, html: data, headers: res.headers }));
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch { reject(new Error('Invalid JSON')); }
+      });
     }).on('error', reject);
   });
 }
 
-function extractData(html, url) {
-  const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() || '';
-  const description = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]
-    || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1] || '';
-  const ogTitle = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']+)["']/i)?.[1] || '';
-  const ogImage = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1] || '';
-  const canonical = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']/i)?.[1] || '';
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-  const links = [];
-  const linkRegex = /<a[^>]*href=["']([^"']+)["'][^>]*>/gi;
-  let match;
-  while ((match = linkRegex.exec(html)) !== null) {
-    const href = match[1];
-    if (href.startsWith('http') || href.startsWith('/')) {
-      links.push(href);
-    }
-  }
-
-  const emails = [...new Set((html.match(/[\w.+-]+@[\w-]+\.[\w.]+/g) || []).filter(e => !e.includes('example') && !e.includes('test')))];
-  const phones = [...new Set((html.match(/\+?\d{10,15}/g) || []))].slice(0, 10);
-
-  const socialRegex = /(?:https?:\/\/)?(?:www\.)?(twitter\.com|x\.com|linkedin\.com|facebook\.com|instagram\.com|github\.com|youtube\.com)\/[\w.-]+/gi;
-  const socials = [...new Set((html.match(socialRegex) || []))].slice(0, 20);
-
-  const structuredData = [];
-  const jsonLdRegex = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
-  while ((match = jsonLdRegex.exec(html)) !== null) {
-    try {
-      structuredData.push(JSON.parse(match[1]));
-    } catch {}
-  }
-
-  const headings = [];
-  const headingRegex = /<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/gi;
-  while ((match = headingRegex.exec(html)) !== null) {
-    headings.push(match[1].replace(/<[^>]+>/g, '').trim());
-  }
-
-  return {
-    url,
-    title: ogTitle || title,
-    description,
-    canonical: canonical || url,
-    headings,
-    links: [...new Set(links)].slice(0, 100),
-    emails,
-    phones,
-    socials,
-    structuredData,
-    images: ogImage ? [ogImage] : [],
-    wordCount: html.replace(/<[^>]+>/g, '').split(/\s+/).length,
-    language: html.match(/<html[^>]*lang=["']([^"']+)["']/i)?.[1] || 'en',
-    fetchedAt: new Date().toISOString(),
-  };
+const cache = {};
+function cacheKey(prefix, params) { return `${prefix}:${JSON.stringify(params)}`; }
+function getCached(key, ttl = 60000) {
+  const c = cache[key];
+  if (c && Date.now() - c.ts < ttl) return c.data;
+  return null;
 }
+function setCache(key, data) { cache[key] = { data, ts: Date.now() }; }
 
-app.get('/api/scrape', authenticate, async (req, res) => {
-  const { url, format } = req.query;
-  if (!url) return res.status(400).json({ error: 'url parameter required' });
+// ─── PRICE ──────────────────────────────────────────
+app.get('/api/price', authenticate, async (req, res) => {
+  const coins = req.query.coins || 'bitcoin,ethereum';
+  const vs = req.query.vs || 'usd';
+  const key = cacheKey('price', { coins, vs });
+  const cached = getCached(key, 30000);
+  if (cached) return res.json(cached);
 
   try {
-    new URL(url);
-  } catch {
-    return res.status(400).json({ error: 'Invalid URL' });
-  }
-
-  try {
-    const { status, html } = await fetchPage(url);
-    const data = extractData(html, url);
-    data.httpStatus = status;
-
-    if (format === 'minimal') {
-      return res.json({ url: data.url, title: data.title, description: data.description, emails: data.emails, phones: data.phones, socials: data.socials });
-    }
-    if (format === 'links') {
-      return res.json({ url: data.url, links: data.links, count: data.links.length });
-    }
-    if (format === 'contacts') {
-      return res.json({ url: data.url, emails: data.emails, phones: data.phones, socials: data.socials });
-    }
-
-    return res.json(data);
+    const data = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=${vs}&include_24hr_change=true&include_market_cap=true`);
+    const result = { source: 'coingecko', coins, vs, prices: data, timestamp: new Date().toISOString() };
+    setCache(key, result);
+    res.json(result);
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/api/scrape/batch', authenticate, async (req, res) => {
-  const { urls, format } = req.body;
-  if (!Array.isArray(urls) || urls.length === 0) {
-    return res.status(400).json({ error: 'urls array required (max 10)' });
+// ─── TRENDING ────────────────────────────────────────
+app.get('/api/trending', authenticate, async (req, res) => {
+  const key = cacheKey('trending', {});
+  const cached = getCached(key, 120000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch('https://api.coingecko.com/api/v3/search/trending');
+    const coins = data.coins?.map(c => ({
+      name: c.item.name,
+      symbol: c.item.symbol,
+      market_cap_rank: c.item.market_cap_rank,
+      price_btc: c.item.price_btc,
+      score: c.item.score,
+      thumb: c.item.thumb,
+    })) || [];
+    const result = { source: 'coingecko', trending: coins, count: coins.length, timestamp: new Date().toISOString() };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  const results = await Promise.allSettled(
-    urls.slice(0, 10).map(async (url) => {
-      try {
-        const { status, html } = await fetchPage(url);
-        return { url, ...extractData(html, url), httpStatus: status };
-      } catch (err) {
-        return { url, error: err.message };
-      }
-    })
-  );
-
-  return res.json({ results: results.map(r => r.value || r.reason), count: results.length });
 });
 
-app.post('/api/extract/contacts', authenticate, async (req, res) => {
-  const { urls } = req.body;
-  if (!Array.isArray(urls) || urls.length === 0) {
-    return res.status(400).json({ error: 'urls array required' });
+// ─── TOP COINS ───────────────────────────────────────
+app.get('/api/top', authenticate, async (req, res) => {
+  const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+  const vs = req.query.vs || 'usd';
+  const key = cacheKey('top', { limit, vs });
+  const cached = getCached(key, 60000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${vs}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false&price_change_percentage=1h,24h,7d`);
+    const result = { source: 'coingecko', coins: data, count: data.length, vs, timestamp: new Date().toISOString() };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  const results = await Promise.allSettled(
-    urls.slice(0, 20).map(async (url) => {
-      try {
-        const { html } = await fetchPage(url);
-        const data = extractData(html, url);
-        return { url, emails: data.emails, phones: data.phones, socials: data.socials };
-      } catch (err) {
-        return { url, error: err.message };
-      }
-    })
-  );
-
-  return res.json({ results: results.map(r => r.value || r.reason) });
 });
 
+// ─── FEAR & GREED ────────────────────────────────────
+app.get('/api/fear-greed', authenticate, async (req, res) => {
+  const limit = parseInt(req.query.limit) || 30;
+  const key = cacheKey('fg', { limit });
+  const cached = getCached(key, 300000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch(`https://api.alternative.me/fng/?limit=${limit}`);
+    const entries = data.data?.map(d => ({
+      value: parseInt(d.value),
+      classification: d.value_classification,
+      timestamp: d.timestamp,
+      date: new Date(parseInt(d.timestamp) * 1000).toISOString(),
+    })) || [];
+    const result = {
+      source: 'alternative.me',
+      current: entries[0] || null,
+      history: entries,
+      count: entries.length,
+      timestamp: new Date().toISOString(),
+    };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── GAS PRICES ──────────────────────────────────────
+app.get('/api/gas', authenticate, async (req, res) => {
+  const key = cacheKey('gas', {});
+  const cached = getCached(key, 30000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch('https://api.etherscan.io/api?module=gastracker&action=gasoracle');
+    const gas = data.result?.SafeGasPrice ? {
+      low: data.result.SafeGasPrice,
+      average: data.result.ProposeGasPrice,
+      fast: data.result.FastGasPrice,
+      base_fee: data.result.BaseFee,
+    } : null;
+
+    const result = {
+      source: 'etherscan',
+      chain: 'ethereum',
+      gas: gas || { low: '~20', average: '~30', fast: '~50' },
+      note: 'Prices in Gwei. Etherscan free tier may hit rate limits.',
+      timestamp: new Date().toISOString(),
+    };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── GLOBAL MARKET ───────────────────────────────────
+app.get('/api/global', authenticate, async (req, res) => {
+  const key = cacheKey('global', {});
+  const cached = getCached(key, 60000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch('https://api.coingecko.com/api/v3/global');
+    const g = data.data;
+    const result = {
+      source: 'coingecko',
+      total_market_cap: g.total_market_cap,
+      total_volume: g.total_volume,
+      market_cap_percentage: g.market_cap_percentage,
+      active_cryptocurrencies: g.active_cryptocurrencies,
+      markets: g.markets,
+      btc_dominance: g.market_cap_percentage?.usd,
+      timestamp: new Date().toISOString(),
+    };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── COIN DETAIL ─────────────────────────────────────
+app.get('/api/coin/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const key = cacheKey('coin', { id });
+  const cached = getCached(key, 60000);
+  if (cached) return res.json(cached);
+
+  try {
+    const data = await fetch(`https://api.coingecko.com/api/v3/coins/${id}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`);
+    const result = {
+      source: 'coingecko',
+      id: data.id,
+      name: data.name,
+      symbol: data.symbol,
+      description: data.description?.en?.substring(0, 500),
+      market_cap_rank: data.market_cap_rank,
+      price: data.market_data?.current_price,
+      market_cap: data.market_data?.market_cap,
+      volume: data.market_data?.total_volume,
+      price_change_24h: data.market_data?.price_change_percentage_24h,
+      price_change_7d: data.market_data?.price_change_percentage_7d,
+      ath: data.market_data?.ath,
+      atl: data.market_data?.atl,
+      categories: data.categories,
+      homepage: data.links?.homepage?.filter(Boolean),
+      timestamp: new Date().toISOString(),
+    };
+    setCache(key, result);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── HEALTH ──────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), uptime: process.uptime() });
+  res.json({ status: 'ok', version: '1.0.0', uptime: process.uptime(), timestamp: new Date().toISOString() });
 });
 
+// ─── DOCS ────────────────────────────────────────────
 app.get('/', (req, res) => {
   res.json({
-    name: 'DataScraper API',
+    name: 'CryptoData API',
     version: '1.0.0',
-    description: 'Scrape any URL and extract structured data, contacts, links, and SEO info',
+    description: 'Unified crypto data API. Real-time prices, trending coins, Fear & Greed index, gas prices, global market data.',
     endpoints: [
-      { method: 'GET', path: '/api/scrape?url=<url>&format=minimal|links|contacts', desc: 'Scrape a single URL' },
-      { method: 'POST', path: '/api/scrape/batch', body: { urls: ['url1', 'url2'], format: 'minimal' }, desc: 'Scrape multiple URLs (max 10)' },
-      { method: 'POST', path: '/api/extract/contacts', body: { urls: ['url1'] }, desc: 'Extract emails, phones, socials from URLs (max 20)' },
+      { method: 'GET', path: '/api/price?coins=bitcoin,ethereum&vs=usd', desc: 'Real-time prices + 24h change + market cap' },
+      { method: 'GET', path: '/api/top?limit=20&vs=usd', desc: 'Top coins by market cap' },
+      { method: 'GET', path: '/api/trending', desc: 'Trending coins right now' },
+      { method: 'GET', path: '/api/fear-greed?limit=30', desc: 'Fear & Greed index history' },
+      { method: 'GET', path: '/api/gas', desc: 'Ethereum gas prices' },
+      { method: 'GET', path: '/api/global', desc: 'Global crypto market stats' },
+      { method: 'GET', path: '/api/coin/bitcoin', desc: 'Detailed coin info' },
       { method: 'GET', path: '/api/health', desc: 'Health check' },
     ],
-    pricing: 'Pay-per-request via RapidAPI marketplace',
+    pricing: 'RapidAPI marketplace — Free tier (100 req/mo) + Pro ($9.99/mo unlimited)',
+    data_sources: ['CoinGecko', 'Alternative.me', 'Etherscan'],
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`DataScraper API running on port ${PORT}`);
+  console.log(`CryptoData API running on port ${PORT}`);
 });
