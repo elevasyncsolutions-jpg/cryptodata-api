@@ -7,10 +7,8 @@ info:
     name: CryptoData API
   x-agent-Provider: CryptoData
 servers:
-  - url: https://cryptodata-api.onrender.com
-    description: Production server (Render)
-  - url: http://localhost:3000
-    description: Local development
+  - url: https://cryptodata-api.elevasyncsolutions.workers.dev
+    description: Production server (Cloudflare Workers)
 
 paths:
   /api/price:
