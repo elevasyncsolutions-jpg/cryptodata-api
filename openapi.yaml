@@ -1,8 +1,8 @@
 openapi: "3.1.0"
 info:
   title: CryptoData API
-  description: "Unified crypto data API. Real-time prices, trending coins, Fear & Greed index, gas prices, global market data. One endpoint for all crypto market data."
-  version: "1.0.0"
+  description: "The most comprehensive crypto data API. Market data, DeFi yields, TVL, meme coin scanner, rug analysis, on-chain data, sentiment, trending, gainers/losers, global metrics. One API for everything crypto."
+  version: "2.0.0"
   contact:
     name: CryptoData API
   x-agent-Provider: CryptoData
@@ -260,3 +260,159 @@ paths:
             application/json:
               schema:
                 type: object
+
+  /api/top-gainers:
+    get:
+      operationId: getTopGainers
+      summary: Top gainers (24h)
+      description: "Coins with the highest 24h price increase"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: vs
+          in: query
+          schema:
+            type: string
+            default: usd
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: Top gainers
+
+  /api/top-losers:
+    get:
+      operationId: getTopLosers
+      summary: Top losers (24h)
+      description: "Coins with the highest 24h price decrease"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: vs
+          in: query
+          schema:
+            type: string
+            default: usd
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: Top losers
+
+  /api/defi/yields:
+    get:
+      operationId: getDefiYields
+      summary: Best DeFi yields
+      description: "Top yield opportunities across all DeFi protocols. Filter by chain, minimum APY."
+      parameters:
+        - name: minApy
+          in: query
+          schema:
+            type: number
+            default: 0
+        - name: chain
+          in: query
+          schema:
+            type: string
+            default: all
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      x-agent-cost: 0.003
+      responses:
+        "200":
+          description: Yield opportunities
+
+  /api/defi/tvl:
+    get:
+      operationId: getDefiTvl
+      summary: Protocol TVL rankings
+      description: "Top DeFi protocols by Total Value Locked"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 30
+        - name: chain
+          in: query
+          schema:
+            type: string
+            default: all
+      x-agent-cost: 0.003
+      responses:
+        "200":
+          description: TVL rankings
+
+  /api/defi/protocol/{slug}:
+    get:
+      operationId: getProtocolDetail
+      summary: DeFi protocol details
+      description: "Detailed info about a DeFi protocol: TVL, chains, category, description"
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      x-agent-cost: 0.003
+      responses:
+        "200":
+          description: Protocol details
+
+  /api/meme/trending:
+    get:
+      operationId: getTrendingMemeCoins
+      summary: Trending meme coins
+      description: "Highest volume new tokens on DEXes right now"
+      parameters:
+        - name: chain
+          in: query
+          schema:
+            type: string
+            default: all
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 15
+      x-agent-cost: 0.003
+      responses:
+        "200":
+          description: Trending tokens
+
+  /api/gas/all:
+    get:
+      operationId: getMultiChainGas
+      summary: Gas prices across chains
+      description: "Current gas prices for major blockchains"
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: Multi-chain gas
+
+  /api/categories:
+    get:
+      operationId: getCategories
+      summary: Coin categories by market cap
+      description: "All cryptocurrency categories ranked by market cap"
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: Categories
+
+  /api/summary:
+    get:
+      operationId: getMarketSummary
+      summary: Market summary dashboard
+      description: "One-call dashboard: BTC/ETH price, Fear & Greed, global market cap, top volume coins"
+      x-agent-cost: 0.004
+      responses:
+        "200":
+          description: Market summary
