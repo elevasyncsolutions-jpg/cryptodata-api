@@ -1,0 +1,207 @@
+openapi: "3.1.0"
+info:
+  title: CryptoData API
+  description: "Unified crypto data API. Real-time prices, trending coins, Fear & Greed index, gas prices, global market data. One endpoint for all crypto market data."
+  version: "1.0.0"
+  contact:
+    name: CryptoData API
+  x-agent-Provider: CryptoData
+servers:
+  - url: https://cryptodata-api.onrender.com
+    description: Production server (Render)
+  - url: http://localhost:3000
+    description: Local development
+
+paths:
+  /api/price:
+    get:
+      operationId: getPrice
+      summary: Real-time crypto prices
+      description: Get real-time prices for any coins with 24h change and market cap
+      parameters:
+        - name: coins
+          in: query
+          description: "Comma-separated coin IDs (e.g. bitcoin,ethereum,solana)"
+          required: true
+          schema:
+            type: string
+            default: bitcoin,ethereum
+        - name: vs
+          in: query
+          description: Currency
+          required: false
+          schema:
+            type: string
+            default: usd
+            enum: [usd, eur, gbp, btc, eth, jpy, cny]
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Price data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  source:
+                    type: string
+                    example: coingecko
+                  prices:
+                    type: object
+                    additionalProperties:
+                      type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/trending:
+    get:
+      operationId: getTrending
+      summary: Trending cryptocurrencies
+      description: Get the most trending coins on CoinGecko right now
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Trending coins
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trending:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        symbol:
+                          type: string
+                        market_cap_rank:
+                          type: integer
+                  timestamp:
+                    type: string
+
+  /api/top:
+    get:
+      operationId: getTopCoins
+      summary: Top coins by market cap
+      description: Get the top cryptocurrencies ranked by market capitalization
+      parameters:
+        - name: limit
+          in: query
+          description: Number of coins (max 100)
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: vs
+          in: query
+          description: Currency
+          required: false
+          schema:
+            type: string
+            default: usd
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Top coins
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/fear-greed:
+    get:
+      operationId: getFearGreed
+      summary: Fear & Greed index
+      description: Get the current Fear & Greed market sentiment index and historical data
+      parameters:
+        - name: limit
+          in: query
+          description: "Days of history (1-365)"
+          required: false
+          schema:
+            type: integer
+            default: 30
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Fear & Greed data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/gas:
+    get:
+      operationId: getGasPrices
+      summary: Ethereum gas prices
+      description: Get current Ethereum gas prices (low, average, fast in Gwei)
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Gas prices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chain:
+                    type: string
+                    example: ethereum
+                  gas:
+                    type: object
+
+  /api/global:
+    get:
+      operationId: getGlobalMarket
+      summary: Global crypto market data
+      description: Get total market cap, 24h volume, BTC dominance, active cryptocurrencies
+      x-agent-cost: 0.001
+      responses:
+        "200":
+          description: Global data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/coin/{id}:
+    get:
+      operationId: getCoinDetail
+      summary: Detailed coin information
+      description: Get comprehensive details about any cryptocurrency including price, market cap, description, and links
+      parameters:
+        - name: id
+          in: path
+          description: "Coin ID (e.g. bitcoin, ethereum, solana)"
+          required: true
+          schema:
+            type: string
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: Coin detail
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      description: Check if the API is operational
+      x-agent-cost: 0
+      responses:
+        "200":
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
