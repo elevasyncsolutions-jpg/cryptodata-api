@@ -203,3 +203,60 @@ paths:
                   status:
                     type: string
                     example: ok
+
+  /api/meme/scan:
+    get:
+      operationId: scanMemeCoins
+      summary: Scan for new meme coins
+      description: "Get the latest tokens launched on DEXes. Ideal for meme coin hunting — returns new tokens with liquidity, volume, price data."
+      parameters:
+        - name: chain
+          in: query
+          description: "Chain filter: solana, ethereum, base, bsc, all"
+          required: false
+          schema:
+            type: string
+            default: all
+        - name: minLiq
+          in: query
+          description: Minimum liquidity in USD
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: limit
+          in: query
+          description: Max results (1-50)
+          required: false
+          schema:
+            type: integer
+            default: 20
+      x-agent-cost: 0.002
+      responses:
+        "200":
+          description: New meme coins
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/meme/analyze:
+    get:
+      operationId: analyzeMemeCoin
+      summary: Analyze a meme coin for rug risk
+      description: "Deep analysis of any token: liquidity, volume, holder distribution, rug risk score. Input a token address."
+      parameters:
+        - name: address
+          in: query
+          description: "Token contract address"
+          required: true
+          schema:
+            type: string
+      x-agent-cost: 0.003
+      responses:
+        "200":
+          description: Token analysis with rug risk score
+          content:
+            application/json:
+              schema:
+                type: object

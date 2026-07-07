@@ -118,6 +118,89 @@ export default {
         }, headers);
       }
 
+      // ─── MEME COIN SCANNER ─────────────────────────
+      if (path === "/api/meme/scan") {
+        const chain = url.searchParams.get("chain") || "all";
+        const minLiq = parseInt(url.searchParams.get("minLiq")) || 100;
+        const limit = Math.min(parseInt(url.searchParams.get("limit")) || 20, 50);
+
+        // Get latest token profiles
+        const profiles = await fetch("https://api.dexscreener.com/token-profiles/latest/v1", {
+          headers: { "User-Agent": "CryptoDataAPI/1.0" },
+        }).then((r) => r.json());
+
+        let filtered = profiles;
+        if (chain !== "all") filtered = filtered.filter((p) => p.chainId === chain);
+
+        // Get detailed data for each token
+        const coins = [];
+        for (const p of filtered.slice(0, limit)) {
+          try {
+            const detail = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${p.tokenAddress}`, {
+              headers: { "User-Agent": "CryptoDataAPI/1.0" },
+            }).then((r) => r.json());
+
+            const pair = detail.pairs?.sort((a, b) => (parseFloat(b.liquidity?.usd) || 0) - (parseFloat(a.liquidity?.usd) || 0))[0];
+            const liq = parseFloat(pair?.liquidity?.usd) || 0;
+            if (liq < minLiq) continue;
+
+            coins.push({
+              name: pair?.baseToken?.name || p.tokenAddress.slice(0, 10),
+              symbol: pair?.baseToken?.symbol || "???",
+              address: p.tokenAddress,
+              chain: p.chainId,
+              price: parseFloat(pair?.priceUsd) || 0,
+              liquidity: liq,
+              volume_24h: parseFloat(pair?.volume?.h24) || 0,
+              fdv: parseFloat(pair?.fdv) || 0,
+              age_hours: pair?.pairCreatedAt ? ((Date.now() - pair.pairCreatedAt) / 3600000).toFixed(1) + "h" : null,
+              pair: pair?.pairAddress,
+              url: p.url,
+              txns_24h: pair?.txns?.h24 ? { buys: pair.txns.h24.buys, sells: pair.txns.h24.sells } : null,
+              price_change_5m: pair?.priceChange?.m5,
+              price_change_1h: pair?.priceChange?.h1,
+            });
+          } catch {}
+        }
+
+        return json({ source: "dexscreener", chain, coins, count: coins.length, scanned_at: new Date().toISOString() }, headers);
+      }
+
+      // ─── MEME COIN ANALYZE ──────────────────────────
+      if (path === "/api/meme/analyze") {
+        const address = url.searchParams.get("address");
+        if (!address) return json({ error: "address parameter required" }, { ...headers, status: 400 });
+
+        const [dexData, tokenData] = await Promise.all([
+          fetch(`https://api.dexscreener.com/latest/dex/tokens/${address}`, {
+            headers: { "User-Agent": "CryptoDataAPI/1.0" },
+          }).then((r) => r.json()),
+          fetch(`https://api.dexscreener.com/latest/dex/search?q=${address}`, {
+            headers: { "User-Agent": "CryptoDataAPI/1.0" },
+          }).then((r) => r.json()),
+        ]);
+
+        const pairs = dexData.pairs || [];
+        const bestPair = pairs.sort((a, b) => (parseFloat(b.liquidity?.usd) || 0) - (parseFloat(a.liquidity?.usd) || 0))[0];
+
+        const analysis = {
+          address,
+          name: bestPair?.baseToken?.name || "unknown",
+          symbol: bestPair?.baseToken?.symbol || "unknown",
+          chains: [...new Set(pairs.map((p) => p.chainId))],
+          price: parseFloat(bestPair?.priceUsd) || 0,
+          total_liquidity: pairs.reduce((s, p) => s + (parseFloat(p.liquidity?.usd) || 0), 0),
+          best_liquidity: parseFloat(bestPair?.liquidity?.usd) || 0,
+          volume_24h: pairs.reduce((s, p) => s + (parseFloat(p.volume?.h24) || 0), 0),
+          fdv: parseFloat(bestPair?.fdv) || 0,
+          age_hours: bestPair?.pairCreatedAt ? ((Date.now() - bestPair.pairCreatedAt) / 3600000).toFixed(1) + "h" : null,
+          pairs_count: pairs.length,
+          rug_risk: calculateRugRisk(pairs),
+        };
+
+        return json({ source: "dexscreener", analysis, scanned_at: new Date().toISOString() }, headers);
+      }
+
       // ─── HEALTH ────────────────────────────────────
       if (path === "/api/health" || path === "/") {
         return json({ status: "ok", name: "CryptoData API", version: "1.0.0", timestamp: new Date().toISOString() }, headers);
@@ -134,4 +217,39 @@ function json(data, extra) {
   return new Response(JSON.stringify(data, null, 2), {
     headers: { "Content-Type": "application/json", ...extra },
   });
+}
+
+function calculateRugRisk(pairs) {
+  const totalLiq = pairs.reduce((s, p) => s + (parseFloat(p.liquidity?.usd) || 0), 0);
+  const totalVol = pairs.reduce((s, p) => s + (parseFloat(p.volume?.h24) || 0), 0);
+  const topPairLiq = parseFloat(pairs.sort((a, b) => (parseFloat(b.liquidity?.usd) || 0) - (parseFloat(a.liquidity?.usd) || 0))[0]?.liquidity?.usd) || 0;
+
+  let score = 0;
+  let reasons = [];
+
+  // Low liquidity = high risk
+  if (totalLiq < 5000) { score += 3; reasons.push("Very low liquidity (<$5K)"); }
+  else if (totalLiq < 10000) { score += 2; reasons.push("Low liquidity (<$10K)"); }
+
+  // Single pair concentration
+  if (pairs.length === 1) { score += 2; reasons.push("Single trading pair"); }
+  if (topPairLiq > 0 && totalLiq > 0 && topPairLiq / totalLiq > 0.9) { score += 1; reasons.push("Liquidity concentrated in one pair"); }
+
+  // Volume vs liquidity ratio (wash trading indicator)
+  if (totalLiq > 0 && totalVol / totalLiq > 20) { score += 2; reasons.push(`Volume/liquidity ratio unusually high (${(totalVol/totalLiq).toFixed(1)}x)`); }
+
+  // No volume
+  if (totalVol === 0) { score += 1; reasons.push("No trading volume"); }
+
+  // Very new pair
+  const ages = pairs.map((p) => p.pairCreatedAt ? (Date.now() - p.pairCreatedAt) : Infinity);
+  const minAge = Math.min(...ages);
+  if (minAge < 3600000) { score += 2; reasons.push("Less than 1 hour old"); }
+  else if (minAge < 86400000) { score += 1; reasons.push("Less than 24 hours old"); }
+
+  let level = "low";
+  if (score >= 5) level = "high";
+  else if (score >= 3) level = "medium";
+
+  return { score, level, max_score: 11, flags: reasons };
 }
