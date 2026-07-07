@@ -1,6 +1,4 @@
 name = "cryptodata-api"
 main = "worker.js"
 compatibility_date = "2025-04-01"
-
-[env.production]
-vars = { ENVIRONMENT = "production" }
+workers_dev = true
