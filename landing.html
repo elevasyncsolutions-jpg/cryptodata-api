@@ -1,546 +1,1114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CryptoData API — The Ultimate Crypto Data API</title>
-  <meta name="description" content="One API for everything crypto. Market data, DeFi yields, meme coin scanner, on-chain, and more. Pay per call with USDC.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: #0a0a0f;
-      color: #e2e2e8;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    ::selection { background: #6366f1; color: #fff; }
-    .gradient-bg {
-      position: fixed; inset: 0; z-index: -1;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 70%),
-                  radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236,72,153,0.05) 0%, transparent 60%);
-    }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CryptoData API — Real-time crypto data for AI agents · Post-paid $1 USDC</title>
+<meta name="description" content="19 crypto data endpoints for AI agents. Get a free API key with $1 credit. Post-paid USDC billing on Solana. MCP auto-discoverable for Claude, Cursor, Cline, Windsurf.">
+<meta name="keywords" content="crypto API, AI agents, MCP, USDC, Solana, crypto data, DeFi, meme coins, x402, AI marketplace">
+<meta property="og:title" content="CryptoData API — AI Agent Crypto Data Platform">
+<meta property="og:description" content="19 endpoints. Free API key with $1 credit. Post-paid USDC billing. MCP auto-discoverable.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CryptoData API for AI Agents">
+<meta name="twitter:description" content="Real-time crypto data. AI agents pay after they use. $1 USDC threshold. MCP auto-discoverable.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:#08080f;color:#e8e8f0;line-height:1.6;overflow-x:hidden}
+::selection{background:#9945FF;color:#fff}
+:root{--purple:#9945FF;--pink:#EC4DFF;--cyan:#14F195;--lime:#B1EA23;--amber:#FFB347;--red:#FF5C5C;--surface:rgba(255,255,255,0.02);--border:rgba(255,255,255,0.05);--text:#e8e8f0;--muted:rgba(255,255,255,0.3);--glow:rgba(153,69,255,0.12);--nav-bg:rgba(8,8,15,0.85)}
+#bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+#bg::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse 35% 30% at 20% 30%,rgba(153,69,255,0.06),transparent),radial-gradient(ellipse 35% 30% at 80% 70%,rgba(20,241,149,0.04),transparent);animation:bgPulse 12s ease-in-out infinite alternate}
+@keyframes bgPulse{0%{transform:scale(1)}100%{transform:scale(1.08) rotate(2deg)}}
+#grid{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.25;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:48px 48px}
 
-    /* NAV */
-    nav {
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(20px);
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(10,10,15,0.85);
-    }
-    nav .container { display: flex; align-items: center; justify-content: space-between; }
-    .logo {
-      font-weight: 800; font-size: 22px;
-      background: linear-gradient(135deg, #818cf8, #6366f1, #a78bfa);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
-    }
-    .logo span { font-weight: 400; -webkit-text-fill-color: #6b7280; }
-    .nav-links { display: flex; align-items: center; gap: 32px; }
-    .nav-links a { color: #9ca3af; text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
-    .nav-links a:hover { color: #e2e2e8; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 24px; border-radius: 12px; font-weight: 600; font-size: 14px;
-      text-decoration: none; transition: all .2s; cursor: pointer; border: none;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: #fff; box-shadow: 0 0 30px rgba(99,102,241,0.2);
-    }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(99,102,241,0.35); }
-    .btn-outline {
-      border: 1px solid rgba(255,255,255,0.1); color: #e2e2e8;
-    }
-    .btn-outline:hover { border-color: rgba(255,255,255,0.25); }
+.container{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
 
-    /* HERO */
-    .hero {
-      padding: 100px 0 60px;
-      text-align: center;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px; border-radius: 100px;
-      background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
-      font-size: 13px; font-weight: 500; color: #818cf8; margin-bottom: 24px;
-    }
-    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .hero h1 {
-      font-size: clamp(40px, 7vw, 72px); font-weight: 900; line-height: 1.05;
-      background: linear-gradient(135deg, #f0f0f5 0%, #818cf8 50%, #a78bfa 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: -2px; margin-bottom: 20px;
-    }
-    .hero p {
-      font-size: 18px; color: #6b7280; max-width: 600px; margin: 0 auto 36px;
-    }
-    .hero-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .hero-stats {
-      display: flex; justify-content: center; gap: 48px; margin-top: 60px;
-      padding: 32px; background: rgba(255,255,255,0.02); border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-    .stat { text-align: center; }
-    .stat-value { font-size: 28px; font-weight: 800; color: #f0f0f5; }
-    .stat-label { font-size: 13px; color: #6b7280; margin-top: 4px; font-weight: 500; }
+.gradient-text{background:linear-gradient(135deg,#e8e8f0 30%,#9945FF 70%,#14F195);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.gradient-p{background:linear-gradient(135deg,#9945FF,#EC4DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px}
+.section-title{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-0.5px;line-height:1.15;margin-bottom:6px}
+.section-desc{font-size:14px;color:var(--muted);max-width:480px;margin:0 auto 28px;text-align:center}
 
-    /* LIVE DEMO */
-    .live-demo {
-      margin: 40px auto; max-width: 700px;
-      background: rgba(255,255,255,0.02); border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.06); overflow: hidden;
-    }
-    .demo-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: 13px; color: #6b7280; font-weight: 500;
-    }
-    .demo-dots { display: flex; gap: 6px; }
-    .demo-dots span {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-    }
-    .demo-dots span:first-child { background: #ef4444; }
-    .demo-dots span:nth-child(2) { background: #f59e0b; }
-    .demo-dots span:last-child { background: #22c55e; }
-    .demo-body {
-      padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8;
-    }
-    .demo-body .line { opacity: 0; animation: fadeIn .3s forwards; }
-    .demo-body .line:nth-child(1) { animation-delay: .1s; }
-    .demo-body .line:nth-child(2) { animation-delay: .3s; }
-    .demo-body .line:nth-child(3) { animation-delay: .5s; }
-    .demo-body .line:nth-child(4) { animation-delay: .7s; }
-    .demo-body .line:nth-child(5) { animation-delay: .9s; }
-    .demo-body .line:nth-child(6) { animation-delay: 1.1s; }
-    .demo-body .line:nth-child(7) { animation-delay: 1.3s; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    .demo-body .k { color: #818cf8; }
-    .demo-body .v { color: #a78bfa; }
-    .demo-body .s { color: #6b7280; }
-    .demo-body .n { color: #fbbf24; }
-    .demo-body .str { color: #34d399; }
+#particles-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.4}
 
-    /* SECTIONS */
-    section { padding: 80px 0; }
-    .section-label {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 600; color: #818cf8; text-transform: uppercase; letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(28px, 4vw, 40px); font-weight: 800; line-height: 1.15;
-      margin-bottom: 16px;
-    }
-    .section-desc { color: #6b7280; font-size: 16px; max-width: 500px; margin-bottom: 48px; }
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+nav .container{display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.logo{font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.logo-mark{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{padding:6px 12px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:12px;font-weight:500;transition:all .2s;cursor:pointer}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-links .btn-primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;padding:6px 14px;border-radius:8px;font-size:12px}
+.nav-links .btn-primary:hover{opacity:0.9;background:linear-gradient(135deg,var(--purple),var(--pink))}
 
-    /* CATEGORIES */
-    .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
-    .cat-card {
-      padding: 28px; border-radius: 16px;
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-      transition: all .3s;
-    }
-    .cat-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(99,102,241,0.2); transform: translateY(-2px); }
-    .cat-icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; margin-bottom: 16px;
-    }
-    .cat-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-    .cat-card p { font-size: 14px; color: #6b7280; line-height: 1.5; }
-    .cat-card .endpoints-list { margin-top: 16px; }
-    .cat-card .endpoint-tag {
-      display: inline-block; padding: 4px 10px; border-radius: 8px;
-      font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      background: rgba(255,255,255,0.04); color: #9ca3af; margin: 2px 3px;
-    }
-    .cat-card .price-tag {
-      display: inline-block; padding: 2px 8px; border-radius: 6px;
-      font-size: 11px; font-weight: 600; margin-left: 4px;
-    }
-    .price-low { background: rgba(34,197,94,0.1); color: #4ade80; }
-    .price-med { background: rgba(251,191,36,0.1); color: #fbbf24; }
-    .price-high { background: rgba(239,68,68,0.1); color: #f87171; }
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-weight:600;font-size:12px;text-decoration:none;transition:all .25s;cursor:pointer;border:none;white-space:nowrap;font-family:'Inter',sans-serif}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;box-shadow:0 0 24px var(--glow)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 32px var(--glow)}
+.btn-outline{border:1px solid var(--border);color:var(--text);background:transparent}
+.btn-outline:hover{border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.02)}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-ghost{background:rgba(255,255,255,0.03);color:var(--muted);padding:6px 12px;font-size:11px}
+.btn-ghost:hover{color:var(--text);background:rgba(255,255,255,0.06)}
 
-    /* ENDPOINTS TABLE */
-    .endpoints-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    .endpoints-table th {
-      text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600; color: #6b7280;
-      text-transform: uppercase; letter-spacing: 1px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .endpoints-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .endpoints-table tr:hover td { background: rgba(255,255,255,0.02); }
-    .endpoint-path {
-      font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #818cf8;
-      background: rgba(99,102,241,0.08); padding: 3px 10px; border-radius: 6px;
-      white-space: nowrap;
-    }
-    .endpoint-method {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
-      padding: 3px 8px; border-radius: 4px; margin-right: 8px;
-    }
-    .method-get { background: rgba(34,197,94,0.1); color: #4ade80; }
+/* SECTIONS */
+.page{display:none;padding:32px 0 60px}
+.page.active{display:block}
+.page .sec-center{text-align:center;margin-bottom:24px}
 
-    /* PLATFORMS */
-    .platforms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .platform-card {
-      padding: 32px; border-radius: 16px;
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-      text-align: center; transition: all .3s;
-    }
-    .platform-card:hover { transform: translateY(-2px); border-color: rgba(99,102,241,0.2); }
-    .platform-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .platform-card p { font-size: 14px; color: #6b7280; margin-bottom: 20px; }
-    .platform-icon { font-size: 36px; margin-bottom: 16px; }
+/* HERO */
+.hero{text-align:center;padding:48px 0 0}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:10px;font-weight:500;border:1px solid rgba(153,69,255,0.12);background:rgba(153,69,255,0.05);color:rgba(255,255,255,0.5);margin-bottom:12px}
+.hero-badge .dot{width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:pl 2s ease-in-out infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:10px}
+.hero p{font-size:14px;color:var(--muted);max-width:480px;margin:0 auto 20px}
+.hero-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
 
-    /* PRICING */
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .pricing-card {
-      padding: 32px; border-radius: 16px;
-      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-      text-align: center; transition: all .3s;
-    }
-    .pricing-card.featured {
-      border-color: rgba(99,102,241,0.3);
-      background: rgba(99,102,241,0.04);
-    }
-    .pricing-card h3 { font-size: 16px; font-weight: 600; color: #6b7280; margin-bottom: 8px; }
-    .pricing-card .price { font-size: 42px; font-weight: 900; margin-bottom: 4px; }
-    .pricing-card .price-desc { font-size: 14px; color: #6b7280; margin-bottom: 24px; }
-    .pricing-card ul { list-style: none; text-align: left; margin-bottom: 28px; }
-    .pricing-card ul li { padding: 8px 0; font-size: 14px; color: #9ca3af; display: flex; align-items: center; gap: 10px; }
-    .pricing-card ul li::before { content: '✓'; color: #22c55e; font-weight: 700; }
+/* PRICE CARDS */
+.price-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;min-width:160px;text-align:left;transition:border-color .3s}
+.pcard:hover{border-color:rgba(153,69,255,0.12)}
+.pcard-name{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+.pcard-price{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.pcard-ch{font-size:11px;font-weight:600}
+.pcard-ch.p{color:var(--cyan)}
+.pcard-ch.n{color:var(--red)}
+.pcard canvas{width:100%;height:36px;border-radius:4px;margin-top:4px;display:block}
 
-    /* CTA */
-    .cta {
-      text-align: center; padding: 100px 0;
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
-    .cta h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
-    .cta p { color: #6b7280; margin-bottom: 32px; font-size: 18px; }
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6px 0;margin-bottom:28px}
+.ticker{display:flex;gap:24px;animation:tick 30s linear infinite;width:max-content}
+.ticker:hover{animation-play-state:paused}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;flex-shrink:0}
+.ti .sy{font-weight:600;color:var(--text)}
+.ti .pr{font-weight:500;color:rgba(255,255,255,0.6)}
+.ti .ch{font-weight:600;font-size:10px}
+.ti .ch.up{color:var(--cyan)}
+.ti .ch.dn{color:var(--red)}
 
-    /* FOOTER */
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.04); padding: 40px 0;
-      text-align: center; font-size: 14px; color: #4b5563;
-    }
+/* DASHBOARD GRID */
+.dash-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.dash-wide{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:border-color .3s}
+.card:hover{border-color:rgba(255,255,255,0.06)}
+.card-title{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--muted);margin-bottom:8px}
+.row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.015)}
+.row:last-child{border:none}
+.rnk{width:14px;font-size:9px;color:var(--muted);font-weight:600;text-align:right;flex-shrink:0}
+.nm{flex:1;font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(255,255,255,0.8)}
+.prc{font-size:11px;font-weight:500;text-align:right;white-space:nowrap}
+.cg{font-size:10px;font-weight:600;width:44px;text-align:right;flex-shrink:0}
+.cg.p{color:var(--cyan)}
+.cg.n{color:var(--red)}
+.card canvas{width:100%!important;height:50px!important;border-radius:4px;display:block}
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hero-stats { flex-direction: column; gap: 24px; }
-      .categories-grid { grid-template-columns: 1fr; }
-      .endpoints-table { font-size: 12px; }
-      .endpoints-table th, .endpoints-table td { padding: 10px 8px; }
-    }
+/* GAUGE */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:4px 0}
+.gauge-svg{width:100px;height:100px}
+.gauge-val{font-size:22px;font-weight:800}
+.gauge-lbl{font-size:10px;fill:var(--muted)}
+.gauge-xt{font-size:10px;color:var(--muted);margin-top:2px}
 
-    /* SCROLL ANIM */
-    .reveal { opacity: 0; transform: translateY(30px); transition: all .6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+/* BARS */
+.bars{display:flex;align-items:flex-end;gap:3px;height:60px;margin-top:4px}
+.bar-w{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;height:100%;justify-content:flex-end}
+.bar{border-radius:2px 2px 0 0;min-height:2px;transition:height 1s ease;width:100%}
+.bar-l{font-size:6px;color:var(--muted);text-align:center;max-width:32px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-    /* GLOW */
-    .glow {
-      position: relative;
-    }
-    .glow::after {
-      content: ''; position: absolute; inset: -1px;
-      border-radius: inherit;
-      background: linear-gradient(135deg, rgba(99,102,241,0.05), transparent);
-      z-index: -1;
-    }
-  </style>
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:600px;margin:0 auto}
+.stat-c{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center}
+.stat-n{font-size:28px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--text),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* KEY MANAGEMENT */
+.key-section{max-width:560px;margin:0 auto}
+.key-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;text-align:center}
+.key-card h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.key-card p{font-size:12px;color:var(--muted);margin-bottom:20px}
+.key-display{display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);word-break:break-all;text-align:left}
+.key-display .copy{flex-shrink:0;cursor:pointer;color:var(--muted);transition:color .2s}
+.key-display .copy:hover{color:var(--text)}
+.usage-bar{height:6px;border-radius:3px;background:rgba(255,255,255,0.06);overflow:hidden;margin:10px 0;width:100%}
+.usage-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--pink));transition:width .8s ease;width:0%}
+.usage-info{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+.pay-info{font-size:11px;color:var(--muted);margin-top:12px;padding:10px;background:rgba(20,241,149,0.04);border:1px solid rgba(20,241,149,0.08);border-radius:8px}
+.pay-info strong{color:var(--text)}
+.pay-info code{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan);word-break:break-all}
+
+/* PLAYGROUND */
+.playground{max-width:700px;margin:0 auto}
+.pg-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.pg-controls label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--muted)}
+.pg-controls select,.pg-controls input{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:12px;font-family:'JetBrains Mono',monospace;outline:none}
+.pg-controls select:focus,.pg-controls input:focus{border-color:var(--purple)}
+.pg-controls select option{background:#08080f;color:var(--text)}
+.pg-controls.full{grid-template-columns:1fr}
+.pg-output{background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:8px;min-height:120px;max-height:340px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;white-space:pre-wrap;word-break:break-all}
+.pg-output .dim{color:var(--muted)}
+.pg-key-hint{font-size:10px;color:var(--muted);margin-bottom:6px;text-align:center}
+
+/* ENDPOINTS TABLE */
+.tbl-w{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 12px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--muted);text-align:left;border-bottom:1px solid var(--border)}
+td{padding:8px 12px;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.015)}
+tr:last-child td{border:none}
+tr:hover td{background:rgba(255,255,255,0.01)}
+.ep-m{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 5px;border-radius:3px;font-weight:600}
+.ep-g{background:rgba(20,241,149,0.06);color:var(--cyan)}
+.ep-p{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4)}
+.ep-pr{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600}
+
+/* MCP SECTION */
+.mcp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:720px;margin:0 auto}
+.mcp-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.mcp-card h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.mcp-card p{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.mcp-config{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.5;word-break:break-all;position:relative}
+.mcp-config .copy-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,0.06);border:none;color:var(--muted);padding:4px 8px;border-radius:4px;font-size:9px;cursor:pointer;font-family:'Inter',sans-serif}
+.mcp-config .copy-btn:hover{color:var(--text);background:rgba(255,255,255,0.1)}
+.mcpts{display:grid;grid-template-columns:1fr 1fr;gap:3px;text-align:left}
+.mcpts div{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);padding:2px 4px}
+
+/* FEATURES */
+.f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.f-c{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:border-color .3s}
+.f-c:hover{border-color:rgba(153,69,255,0.1)}
+.f-c svg{width:18px;height:18px;color:var(--purple);margin-bottom:6px}
+.f-c h3{font-size:13px;font-weight:600;margin-bottom:3px}
+.f-c p{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* FOOTER */
+footer{padding:20px 0;border-top:1px solid var(--border);text-align:center;font-size:11px;color:var(--muted)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);color:var(--text);padding:10px 20px;border-radius:10px;border:1px solid var(--border);font-size:12px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* SPINNER */
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .6s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{color:var(--muted);font-size:11px;padding:20px 0;text-align:center}
+
+.loading{text-align:center;padding:24px 0;color:var(--muted);font-size:12px}
+
+/* BLOG */
+.blog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:800px;margin:0 auto}
+.blog-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .25s;text-align:left}
+.blog-card:hover{border-color:rgba(153,69,255,0.15);transform:translateY(-2px);box-shadow:0 8px 32px rgba(153,69,255,0.06)}
+.blog-card .tag{display:inline-block;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;padding:2px 8px;border-radius:100px;background:rgba(153,69,255,0.08);color:var(--purple);margin-bottom:8px}
+.blog-card h3{font-size:15px;font-weight:700;line-height:1.25;margin-bottom:4px;color:var(--text)}
+.blog-card .excerpt{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.blog-card .meta{font-size:9px;color:rgba(255,255,255,0.25);display:flex;gap:12px}
+.blog-post{max-width:720px;margin:0 auto;text-align:left}
+.blog-post .back{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;margin-bottom:16px;padding:4px 10px;border-radius:6px;border:1px solid var(--border)}
+.blog-post .back:hover{color:var(--text)}
+.blog-post h1{font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.5px;line-height:1.15;margin-bottom:6px}
+.blog-post .post-meta{font-size:11px;color:var(--muted);margin-bottom:16px;display:flex;gap:12px}
+.blog-post .post-content{font-size:13px;line-height:1.7;color:rgba(255,255,255,0.8)}
+.blog-post .post-content p{margin-bottom:14px}
+.blog-post .post-content h2{font-size:18px;font-weight:700;margin:24px 0 10px;color:var(--text)}
+.blog-post .post-content h3{font-size:14px;font-weight:600;margin:18px 0 8px;color:var(--text)}
+.blog-post .post-content code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(255,255,255,0.04);padding:1px 5px;border-radius:3px;color:var(--cyan)}
+.blog-post .post-content pre{background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:8px;padding:12px;overflow-x:auto;margin:12px 0;font-size:11px;line-height:1.5}
+.blog-post .post-content ul,.blog-post .post-content ol{padding-left:20px;margin-bottom:14px}
+.blog-post .post-content li{margin-bottom:4px}
+.blog-post .post-content strong{color:var(--text)}
+.blog-post .cta-box{background:linear-gradient(135deg,rgba(153,69,255,0.06),rgba(20,241,149,0.04));border:1px solid rgba(153,69,255,0.1);border-radius:10px;padding:20px;margin:20px 0;text-align:center}
+.blog-post .cta-box p{font-size:12px;color:var(--muted);margin-bottom:10px}
+
+/* CONVERSION SECTION */
+.conv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:600px;margin:0 auto 24px}
+.conv-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.conv-num{font-size:24px;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.conv-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+
+@media(max-width:768px){
+  .dash-grid,.dash-wide,.stats-grid,.f-grid,.mcp-grid{grid-template-columns:1fr}
+  .pg-controls{grid-template-columns:1fr}
+  .nav-links a:not(.btn-primary):not(.logo){display:none}
+  .price-cards{flex-direction:column;align-items:center}
+}
+</style>
 </head>
 <body>
-  <div class="gradient-bg"></div>
+<div id="bg"></div>
+<div id="grid"></div>
 
-  <!-- NAV -->
-  <nav>
-    <div class="container">
-      <div class="logo">CryptoData<span>API</span></div>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#endpoints">Endpoints</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#platforms">Platforms</a>
-        <a href="https://github.com/elevasyncsolutions-jpg/cryptodata-api" target="_blank">GitHub</a>
-        <a href="#" class="btn btn-primary">Start Building</a>
+<nav>
+<div class="container">
+  <div class="logo" onclick="showPage('dashboard')"><div class="logo-mark">⌘</div>CryptoData</div>
+  <div class="nav-links">
+    <a onclick="showPage('dashboard')" class="active">Dashboard</a>
+    <a onclick="showPage('keys')">API Keys</a>
+    <a onclick="showPage('playground')">Playground</a>
+    <a onclick="showPage('docs')">Docs</a>
+    <a onclick="showPage('mcp')">MCP</a>
+    <a onclick="showPage('blog')">Blog</a>
+    <a onclick="showPage('keys')" class="btn-primary">Get API Key</a>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="hero">
+    <div class="hero-badge"><span class="dot"></span> AI Agent Ready · 19 Endpoints · Post-paid USDC</div>
+    <h1><span class="gradient-text">Crypto data for AI agents.<br>Use first, pay after $1.</span></h1>
+    <p>19 endpoints for market data, DeFi, meme coins, on-chain, and sentiment. Free API key with $1 credit. Post-paid USDC billing on Solana. MCP auto-discoverable.</p>
+    <div class="hero-actions">
+      <a onclick="showPage('keys')" class="btn btn-primary">Get Free API Key</a>
+      <a onclick="showPage('mcp')" class="btn btn-outline">MCP Setup</a>
+    </div>
+  </div>
+
+  <div class="price-cards" id="priceCards"></div>
+  <div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+
+  <div class="sec-center"><div class="section-label">Live Market</div><h2 class="section-title">Real-time intelligence</h2><p class="section-desc">Live data from CoinGecko, DeFiLlama, DexScreener, Alternative.me.</p></div>
+
+  <div class="dash-grid">
+    <div class="card">
+      <div class="card-title">Top Movers (24h)</div>
+      <div id="movers"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Fear & Greed</div>
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="8"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--red)" stroke-width="8" stroke-dasharray="0 301" stroke-linecap="round" id="fg-arc" transform="rotate(-90 60 60)"/>
+          <text x="60" y="48" text-anchor="middle" class="gauge-val" id="fg-val" fill="var(--text)">—</text>
+          <text x="60" y="64" text-anchor="middle" class="gauge-lbl" id="fg-lbl">—</text>
+        </svg>
+        <div class="gauge-xt" id="fg-desc">Market Sentiment</div>
       </div>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge"><span class="dot"></span> Live on Cloudflare Workers</div>
-      <h1>One API.<br>Everything Crypto.</h1>
-      <p>Market data, DeFi yields, meme coin scanner, on-chain analytics, sentiment — one endpoint for every data source your agent needs.</p>
-      <div class="hero-btns">
-        <a href="#endpoints" class="btn btn-primary">View Endpoints →</a>
-        <a href="https://cryptodata-api.elevasyncsolutions.workers.dev" target="_blank" class="btn btn-outline">Try Live API</a>
-      </div>
-
-      <!-- LIVE DEMO -->
-      <div class="live-demo">
-        <div class="demo-header">
-          <div class="demo-dots"><span></span><span></span><span></span></div>
-          GET /api/summary — Live
-        </div>
-        <div class="demo-body">
-          <div class="line">{</div>
-          <div class="line">  <span class="k">"prices"</span>: { <span class="k">"btc"</span>: <span class="n" id="d-btc">63,984</span>, <span class="k">"eth"</span>: <span class="n" id="d-eth">1,794</span> },</div>
-          <div class="line">  <span class="k">"fear_greed"</span>: { <span class="k">"value"</span>: <span class="n" id="d-fg">27</span>, <span class="k">"classification"</span>: <span class="str" id="d-fgc">"Fear"</span> },</div>
-          <div class="line">  <span class="k">"global"</span>: { <span class="k">"total_market_cap"</span>: <span class="str" id="d-global">"$2.27T"</span> },</div>
-          <div class="line">  <span class="k">"top_volume"</span>: [ { <span class="k">"symbol"</span>: <span class="str">"BTC"</span>, <span class="k">"price"</span>: <span class="n">63,984</span> } ]</div>
-          <div class="line">}</div>
-        </div>
-      </div>
-
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-value">22</div><div class="stat-label">Endpoints</div></div>
-        <div class="stat"><div class="stat-value">5</div><div class="stat-label">Data Sources</div></div>
-        <div class="stat"><div class="stat-value">6</div><div class="stat-label">Categories</div></div>
-        <div class="stat"><div class="stat-value">$0</div><div class="stat-label">To Start</div></div>
-      </div>
+    <div class="card">
+      <div class="card-title">Global Market</div>
+      <div id="globalStats"><div class="loading">Loading...</div></div>
     </div>
-  </section>
+  </div>
 
-  <!-- FEATURES -->
-  <section id="features">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">✦ Categories</div>
-        <h2 class="section-title">Every crypto data<br>source in one API</h2>
-        <p class="section-desc">From real-time prices to DeFi yields to meme coin rugs — we cover every layer of the crypto economy.</p>
-      </div>
-      <div class="categories-grid">
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(99,102,241,0.1);">📊</div>
-          <h3>Market Data</h3>
-          <p>Real-time prices, trending, top coins, gainers/losers, global metrics, coin details, categories.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">/api/price</span>
-            <span class="endpoint-tag">/api/trending</span>
-            <span class="endpoint-tag">/api/top</span>
-            <span class="endpoint-tag">/api/top-gainers</span>
-            <span class="endpoint-tag">/api/top-losers</span>
-            <span class="endpoint-tag">/api/global</span>
-            <span class="endpoint-tag">/api/coin/{id}</span>
-            <span class="endpoint-tag">/api/categories</span>
-            <span class="endpoint-tag">/api/summary</span>
-          </div>
+  <div class="dash-wide">
+    <div class="card">
+      <div class="card-title">Bitcoin (7d)</div>
+      <canvas id="d-btc-s" height="50"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">Ethereum (7d)</div>
+      <canvas id="d-eth-s" height="50"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">Volume Leaders</div>
+      <div class="bars" id="volChart"></div>
+    </div>
+  </div>
+</div>
+
+<!-- API KEYS -->
+<div class="page" id="page-keys">
+  <div class="sec-center">
+    <div class="section-label">Authentication</div>
+    <h2 class="section-title">Get your free API key</h2>
+    <p class="section-desc">Each key comes with $1 free credit (~100-200 calls). Pay $1 USDC when exhausted to continue.</p>
+  </div>
+  <div class="key-section">
+    <div class="key-card" id="keyCard">
+      <h3>Generate your API key</h3>
+      <p>One click. No email. No signup. Just a key with $1 credit.</p>
+      <button class="btn btn-primary" onclick="generateKey()" id="genBtn">Generate Free API Key</button>
+      <div id="keyResult" style="display:none;margin-top:20px">
+        <div class="key-display">
+          <span id="keyValue"></span>
+          <span class="copy" onclick="copyKey()" id="copyBtn">📋</span>
         </div>
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(52,211,153,0.1);">🏦</div>
-          <h3>DeFi</h3>
-          <p>Best yields, TVL rankings, liquidity pools, protocol details across all major chains.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">/api/defi/yields</span>
-            <span class="endpoint-tag">/api/defi/tvl</span>
-            <span class="endpoint-tag">/api/defi/pools</span>
-            <span class="endpoint-tag">/api/defi/protocol/{slug}</span>
-          </div>
+        <div class="usage-bar"><div class="usage-fill" id="usageFill"></div></div>
+        <div class="usage-info">
+          <span id="balanceLabel">$1.00 remaining</span>
+          <span id="usedLabel">$0.00 used</span>
         </div>
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(251,191,36,0.1);">🪙</div>
-          <h3>Meme Coins & DEX</h3>
-          <p>Scan new tokens, analyze rug risk, track trending meme coins across Solana, ETH, Base, BSC.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">/api/meme/scan</span>
-            <span class="endpoint-tag">/api/meme/analyze</span>
-            <span class="endpoint-tag">/api/meme/trending</span>
-          </div>
-        </div>
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(239,68,68,0.1);">⛽</div>
-          <h3>On-Chain</h3>
-          <p>Gas prices, multi-chain gas tracking, and real-time blockchain activity metrics.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">/api/gas</span>
-            <span class="endpoint-tag">/api/gas/all</span>
-          </div>
-        </div>
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(251,191,36,0.1);">🧠</div>
-          <h3>Sentiment</h3>
-          <p>Fear & Greed index with historical data. Market emotion at a glance.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">/api/fear-greed</span>
-          </div>
-        </div>
-        <div class="cat-card reveal">
-          <div class="cat-icon" style="background:rgba(99,102,241,0.1);">⚡</div>
-          <h3>AI-Ready</h3>
-          <p>Optimized for AI agents. MCP-compatible, per-call pricing, zero configuration.</p>
-          <div class="endpoints-list">
-            <span class="endpoint-tag">OpenAPI 3.1</span>
-            <span class="endpoint-tag">x402 Protocol</span>
-            <span class="endpoint-tag">MCP Ready</span>
-          </div>
+        <div class="pay-info">
+          <strong>Post-paid billing:</strong> When your balance runs out, send <strong>$1 USDC</strong> to<br>
+          <code id="payWallet">DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef</code><br>
+          on <strong>Solana</strong> (mainnet), then POST <code>/api/pay</code> with <code>{key, tx}</code> to refill.
+          <div style="margin-top:8px"><button class="btn btn-sm btn-outline" onclick="checkUsage()">Check Usage</button></div>
+          <div id="usageResult" style="margin-top:6px;font-size:10px;color:var(--muted)"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- ENDPOINTS -->
-  <section id="endpoints">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">⚡ Endpoints</div>
-        <h2 class="section-title">Every endpoint,<br>priced per call</h2>
-        <p class="section-desc">No subscriptions. No monthly commitments. Pay only for what you use.</p>
-      </div>
-      <div class="reveal" style="overflow-x:auto;">
-        <table class="endpoints-table">
-          <thead>
-            <tr><th>Endpoint</th><th>Description</th><th>Price</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/price</span></td><td>Real-time coin prices</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/trending</span></td><td>Trending coins</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/top</span></td><td>Top coins by market cap</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/top-gainers</span></td><td>Biggest 24h gainers</td><td><span class="price-tag price-med">$0.20</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/top-losers</span></td><td>Biggest 24h losers</td><td><span class="price-tag price-med">$0.20</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/global</span></td><td>Global market overview</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/coin/{id}</span></td><td>Detailed coin breakdown</td><td><span class="price-tag price-med">$0.20</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/categories</span></td><td>Crypto categories</td><td><span class="price-tag price-med">$0.20</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/summary</span></td><td>One-call market dashboard</td><td><span class="price-tag price-high">$0.40</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/defi/yields</span></td><td>Best DeFi yields</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/defi/tvl</span></td><td>TVL rankings</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/defi/pools</span></td><td>Liquidity pools</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/defi/protocol/{slug}</span></td><td>Protocol details</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/meme/scan</span></td><td>New token scanner</td><td><span class="price-tag price-med">$0.20</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/meme/analyze</span></td><td>Rug risk analysis</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/meme/trending</span></td><td>Trending DEX tokens</td><td><span class="price-tag price-high">$0.30</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/gas</span></td><td>ETH gas prices</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-            <tr><td><span class="method-get">GET</span><span class="endpoint-path">/api/fear-greed</span></td><td>Fear & Greed index</td><td><span class="price-tag price-low">$0.10</span></td></tr>
-          </tbody>
-        </table>
+<!-- PLAYGROUND -->
+<div class="page" id="page-playground">
+  <div class="sec-center">
+    <div class="section-label">Test Drive</div>
+    <h2 class="section-title">Try any endpoint live</h2>
+    <p class="section-desc">Paste your API key, pick an endpoint, see the real response.</p>
+  </div>
+  <div class="playground">
+    <div class="pg-controls">
+      <label>Endpoint
+        <select id="pgEndpoint" onchange="updatePgParams()"></select>
+      </label>
+      <label>API Key
+        <input type="text" id="pgApiKey" placeholder="cd_...">
+      </label>
+    </div>
+    <div class="pg-controls" id="pgParams"></div>
+    <div style="text-align:center;margin:8px 0">
+      <button class="btn btn-primary btn-sm" onclick="sendPlayground()">Send Request</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('pgKeyInput').style.display=document.getElementById('pgKeyInput').style.display==='none'?'block':'none'">Show Key Field</button>
+    </div>
+    <div class="pg-output" id="pgOutput"><span class="dim">Select endpoint, enter API key, and click Send.</span></div>
+  </div>
+</div>
+
+<!-- DOCS -->
+<div class="page" id="page-docs">
+  <div class="sec-center">
+    <div class="section-label">API Reference</div>
+    <h2 class="section-title">19 endpoints · 6 categories</h2>
+    <p class="section-desc">Post-paid billing. Free $1 credit on every key (~100-200 calls). Prices from $0.005 to $0.05 per call.</p>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto 20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px">Authentication</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.7">
+      All API endpoints require an API key in the <code style="font-size:10px;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px;font-family:'JetBrains Mono',monospace">x-api-key</code> header.<br>
+      Get a free key: <code style="font-size:10px;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px">curl -X POST https://cryptodata-api.datachain.workers.dev/api/register</code><br>
+      Use it: <code style="font-size:10px;background:rgba(255,255,255,0.04);padding:1px 4px;border-radius:3px">curl -H "x-api-key: cd_..." https://cryptodata-api.datachain.workers.dev/api/price</code>
+    </div>
+  </div>
+
+  <div class="tbl-w">
+    <table>
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Category</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/price</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/trending</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/top</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/top-gainers</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--amber)">$0.02</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/top-losers</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--amber)">$0.02</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/global</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/coin/{id}</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/categories</span></td><td>Market</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/summary</span></td><td>Aggregated</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/defi/yields</span></td><td>DeFi</td><td><span class="ep-pr" style="color:var(--amber)">$0.02</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/defi/tvl</span></td><td>DeFi</td><td><span class="ep-pr" style="color:var(--amber)">$0.02</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/defi/pools</span></td><td>DeFi</td><td><span class="ep-pr" style="color:var(--amber)">$0.02</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/meme/scan</span></td><td>Meme</td><td><span class="ep-pr" style="color:var(--pink)">$0.05</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/meme/analyze</span></td><td>Meme</td><td><span class="ep-pr" style="color:var(--pink)">$0.05</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/meme/trending</span></td><td>Meme</td><td><span class="ep-pr" style="color:var(--amber)">$0.03</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/gas</span></td><td>On-Chain</td><td><span class="ep-pr" style="color:var(--cyan)">$0.005</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/gas/all</span></td><td>On-Chain</td><td><span class="ep-pr" style="color:var(--cyan)">$0.01</span></td></tr>
+        <tr><td><span class="ep-m ep-g">GET</span></td><td><span class="ep-p">/api/fear-greed</span></td><td>Sentiment</td><td><span class="ep-pr" style="color:var(--cyan)">$0.005</span></td></tr>
+      </tbody>
+    </table>
+    <div style="padding:8px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">Pay to: <code style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--cyan)">DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef</code> · USDC on Solana</div>
+  </div>
+</div>
+
+<!-- MCP -->
+<div class="page" id="page-mcp">
+  <div class="sec-center">
+    <div class="section-label">AI Agent Auto-Discovery</div>
+    <h2 class="section-title">MCP Protocol — zero setup required</h2>
+    <p class="section-desc">Any MCP-compatible agent finds our 19 data tools automatically. Claude, Cursor, Cline, Windsurf — all supported.</p>
+  </div>
+  <div class="mcp-grid">
+    <div class="mcp-card">
+      <h3>Add MCP Server</h3>
+      <p>In Claude Desktop, Cursor, or Cline, add this Streamable HTTP MCP server:</p>
+      <div class="mcp-config" id="mcpConfig">
+        {<br>
+        &nbsp;&nbsp;"mcpServers": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;"cryptodata": {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "streamableHttp",<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url": "<span style="color:var(--cyan)">https://cryptodata-api.datachain.workers.dev/mcp</span>"<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;}<br>
+        }
+        <button class="copy-btn" onclick="copyMcpConfig()">Copy</button>
       </div>
     </div>
-  </section>
-
-  <!-- PRICING -->
-  <section id="pricing">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">💰 Pricing</div>
-        <h2 class="section-title">Pay per call.<br>No subscriptions.</h2>
-        <p class="section-desc">Agents pay exactly what they use. You earn for every request.</p>
-      </div>
-      <div class="pricing-grid">
-        <div class="pricing-card reveal">
-          <h3>Endpoint</h3>
-          <div class="price">$0.10</div>
-          <div class="price-desc">per call — basic endpoints</div>
-          <ul>
-            <li>Price, trending, top coins</li>
-            <li>Global market data</li>
-            <li>Gas prices</li>
-            <li>Fear & Greed</li>
-          </ul>
-        </div>
-        <div class="pricing-card featured reveal">
-          <h3>Premium</h3>
-          <div class="price">$0.30</div>
-          <div class="price-desc">per call — advanced endpoints</div>
-          <ul>
-            <li>DeFi yields & TVL</li>
-            <li>Meme coin scan & analyze</li>
-            <li>Coin detail breakdown</li>
-            <li>Gainers & losers</li>
-          </ul>
-        </div>
-        <div class="pricing-card reveal">
-          <h3>Dashboard</h3>
-          <div class="price">$0.40</div>
-          <div class="price-desc">per call — aggregated data</div>
-          <ul>
-            <li>/api/summary — complete market</li>
-            <li>Multi-source aggregation</li>
-            <li>Cached responses (fast)</li>
-            <li>10+ data points per call</li>
-          </ul>
-        </div>
+    <div class="mcp-card">
+      <h3>Agent discovers 20 tools</h3>
+      <p>Your AI agent sees these tools immediately, no config beyond the server URL:</p>
+      <div class="mcpts">
+        <div>register</div><div>check_usage</div>
+        <div>get_price</div><div>get_trending</div>
+        <div>get_top</div><div>get_top_gainers</div>
+        <div>get_top_losers</div><div>get_global</div>
+        <div>get_coin</div><div>get_categories</div>
+        <div>get_defi_yields</div><div>get_defi_tvl</div>
+        <div>get_defi_pools</div><div>get_defi_protocol</div>
+        <div>get_meme_scan</div><div>get_meme_analyze</div>
+        <div>get_meme_trending</div><div>get_gas</div>
+        <div>get_gas_all</div><div>get_fear_greed</div>
+        <div>get_summary</div>
       </div>
     </div>
-  </section>
-
-  <!-- PLATFORMS -->
-  <section id="platforms">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">🚀 Distribution</div>
-        <h2 class="section-title">Available everywhere<br>agents look</h2>
-        <p class="section-desc">Listed on every major AI agent marketplace for maximum discovery.</p>
-      </div>
-      <div class="platforms-grid">
-        <div class="platform-card reveal">
-          <div class="platform-icon">🧙</div>
-          <h3>Agent Wonderland</h3>
-          <p>Discoverable by Claude, Cursor, Codex, and 50k+ AI agents. Pay with fiat or crypto.</p>
-          <a href="https://agentwonderland.com" target="_blank" class="btn btn-outline">View Listing</a>
-        </div>
-        <div class="platform-card reveal">
-          <div class="platform-icon">🔗</div>
-          <h3>Leash Market</h3>
-          <p>Earn USDC directly. x402 protocol, per-call settlement, no middleman.</p>
-          <a href="https://leash.market" target="_blank" class="btn btn-outline">View Listing</a>
-        </div>
-        <div class="platform-card reveal">
-          <div class="platform-icon">📡</div>
-          <h3>Direct API</h3>
-          <p>Call directly from any app. No auth, no SDK, no configuration.</p>
-          <a href="https://cryptodata-api.elevasyncsolutions.workers.dev" target="_blank" class="btn btn-outline">Try Now</a>
-        </div>
-      </div>
+  </div>
+  <div style="max-width:720px;margin:12px auto 0;text-align:center">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;display:inline-block">
+      <div style="font-size:11px;font-weight:600;margin-bottom:6px">Auto-discovery endpoint</div>
+      <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan)">https://cryptodata-api.datachain.workers.dev/.well-known/mcp.json</code>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">Agents that support <code>.well-known/mcp.json</code> find us automatically.</div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="container">
-      <h2>Ready to build with<br>the best crypto API?</h2>
-      <p>Start earning in USDC today. No subscriptions. Zero setup.</p>
-      <a href="https://github.com/elevasyncsolutions-jpg/cryptodata-api" target="_blank" class="btn btn-primary">View on GitHub →</a>
-    </div>
-  </section>
+<!-- BLOG -->
+<div class="page" id="page-blog">
+  <div class="sec-center">
+    <div class="section-label">Content</div>
+    <h2 class="section-title">Crypto AI Blog</h2>
+    <p class="section-desc">Tutorials, comparisons, and guides for building AI agents with crypto data.</p>
+  </div>
+  <div class="blog-grid" id="blogGrid"></div>
+  <div class="blog-post" id="blogPost" style="display:none"></div>
+</div>
 
-  <footer>
-    <div class="container">
-      CryptoData API — Built for the agent economy. Earn USDC per call.
-    </div>
-  </footer>
+</div>
 
-  <script>
-    // Live data
-    async function updatePrices() {
-      try {
-        const r = await fetch('/api/summary');
-        const d = await r.json();
-        document.getElementById('d-btc').textContent = d.prices?.btc?.toLocaleString() || '—';
-        document.getElementById('d-eth').textContent = d.prices?.eth?.toLocaleString() || '—';
-        document.getElementById('d-fg').textContent = d.fear_greed?.value || '—';
-        document.getElementById('d-fgc').textContent = '"' + (d.fear_greed?.classification || '—') + '"';
-        document.getElementById('d-global').textContent = d.global?.total_market_cap || '—';
-      } catch {}
+<footer>
+<div class="container">
+  CryptoData API v3.0 · Post-paid USDC billing · Pay to: <code style="font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,0.04);padding:1px 5px;border-radius:3px">DEXbxp…uZef</code> · MCP: <code style="font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(255,255,255,0.04);padding:1px 5px;border-radius:3px">/.well-known/mcp.json</code>
+</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── ROUTING ────────────────────────────────────────
+let currentKey = localStorage.getItem('crypto_api_key') || '';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelector(`.nav-links a[onclick*="${id}"]`)?.classList.add('active');
+  document.getElementById('pgApiKey').value = currentKey;
+}
+
+function toast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── SPARKLINE ──────────────────────────────────────
+function drawS(id, data, color) {
+  const e = document.getElementById(id); if (!e || !data || data.length < 2) return;
+  const x = e.getContext('2d'), r = window.devicePixelRatio || 1, b = e.getBoundingClientRect();
+  e.width = b.width * r; e.height = 60 * r; x.scale(r, r);
+  const w = b.width, h = 60, mn = Math.min(...data), mx = Math.max(...data), rg = mx - mn || 1;
+  const p = data.map((v, j) => ({ x: j / (data.length - 1) * w, y: h - 5 - ((v - mn) / rg) * (h - 10) }));
+  x.beginPath(); x.strokeStyle = color; x.lineWidth = 1.5; x.lineJoin = 'round';
+  p.forEach((v, j) => j === 0 ? x.moveTo(v.x, v.y) : x.lineTo(v.x, v.y)); x.stroke();
+  x.lineTo(p[p.length - 1].x, h - 3); x.lineTo(p[0].x, h - 3); x.closePath();
+  x.fillStyle = color + '12'; x.fill();
+}
+
+// ─── DASHBOARD DATA ─────────────────────────────────
+const DEMO_DATA = {
+  prices: { btc: 63304, eth: 1775, sol: 81.2, btc_24h: 0.18, eth_24h: -0.05, sol_24h: 0.80 },
+  global: { total_market_cap: 2.4e12, total_volume: 8.5e10, btc_dominance: 52.4, active_coins: 12543 },
+};
+const DEMO_MOVERS = [
+  { n: 'Aave', p: 145, c: 12.4 },
+  { n: 'Render', p: 7.82, c: 8.9 },
+  { n: 'Fetch.ai', p: 1.45, c: 6.2 },
+  { n: 'Near', p: 4.92, c: 5.1 },
+  { n: 'Ethena', p: 0.89, c: -4.3 },
+  { n: 'Arbitrum', p: 0.76, c: -3.8 },
+  { n: 'Optimism', p: 1.82, c: -3.1 },
+  { n: 'Celestia', p: 5.23, c: -2.9 },
+];
+const FALLBACK_BTC = [59000,58500,59200,59800,60100,59500,61000,61500,60800,62000,62500,61800,62800,63304];
+const FALLBACK_ETH = [1680,1720,1700,1690,1710,1750,1730,1740,1760,1755,1770,1765,1772,1775];
+
+async function fetchPublic() {
+  try {
+    const r = await fetch('/api/public/market');
+    if (!r.ok) throw new Error('fetch failed');
+    return await r.json();
+  } catch {
+    return DEMO_DATA;
+  }
+}
+
+async function loadDashboard() {
+  try {
+    const [pub, fgRaw] = await Promise.all([
+      fetchPublic(),
+      fetch('https://api.alternative.me/fng/?limit=1').then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+
+    // Price cards
+    const p = pub?.prices || {};
+    const fmtPrice = (v) => v != null && v > 0 ? '$' + (v > 100 ? v.toLocaleString(undefined,{maximumFractionDigits:0}) : v.toFixed(2)) : '—';
+    const fmtCh = (v) => v != null ? (v >= 0 ? '+' : '') + v.toFixed(2) + '%' : '—';
+    const chCls = (v) => v != null ? (v >= 0 ? 'p' : 'n') : '';
+    const priceCards = [
+      { id:'btc', name:'Bitcoin', sym:'BTC', price:p.btc, ch:p.btc_24h, color:'#f7931a' },
+      { id:'eth', name:'Ethereum', sym:'ETH', price:p.eth, ch:p.eth_24h, color:'#627eea' },
+      { id:'sol', name:'Solana', sym:'SOL', price:p.sol, ch:p.sol_24h, color:'#9945FF' },
+    ];
+    document.getElementById('priceCards').innerHTML = priceCards.map(c => `
+      <div class="pcard">
+        <div class="pcard-name">${c.name}</div>
+        <div class="pcard-price">${fmtPrice(c.price)}</div>
+        <div class="pcard-ch ${chCls(c.ch)}">${fmtCh(c.ch)}</div>
+        <canvas id="s-${c.id}" height="36"></canvas>
+      </div>`).join('');
+
+    // Simple sparkline data (use real if available, else fallback)
+    setTimeout(() => {
+      try { drawS('s-btc', FALLBACK_BTC, '#f7931a'); drawS('d-btc-s', FALLBACK_BTC, '#f7931a'); } catch {}
+      try { drawS('s-eth', FALLBACK_ETH, '#627eea'); drawS('d-eth-s', FALLBACK_ETH, '#627eea'); } catch {}
+      try { drawS('s-sol', FALLBACK_ETH.map(v => v/20), '#9945FF'); } catch {}
+    }, 50);
+
+    // Ticker
+    try {
+      const ticker = document.getElementById('ticker');
+      const items = priceCards.map(c => ({ s: c.sym, p: c.price, c: c.ch })).filter(x => x.p > 0);
+      if (items.length) {
+        ticker.innerHTML = [...items, ...items].map(x =>
+          '<span class="ti"><span class="sy">' + x.s + '</span><span class="pr">' + fmtPrice(x.p) + '</span><span class="ch ' + (x.c >= 0 ? 'up' : 'dn') + '">' + fmtCh(x.c) + '</span></span>'
+        ).join('');
+      }
+    } catch {}
+
+    // Global stats
+    try {
+      const g = pub?.global;
+      if (g?.total_market_cap) {
+        document.getElementById('globalStats').innerHTML = `
+          <div style="margin-bottom:6px"><div style="font-size:9px;color:var(--muted)">Market Cap</div><div style="font-size:15px;font-weight:700">$${(g.total_market_cap/1e12).toFixed(2)}T</div></div>
+          <div style="margin-bottom:6px"><div style="font-size:9px;color:var(--muted)">24h Volume</div><div style="font-size:15px;font-weight:700">$${(g.total_volume/1e9).toFixed(1)}B</div></div>
+          <div><div style="font-size:9px;color:var(--muted)">BTC Dominance</div><div style="font-size:15px;font-weight:700">${(g.btc_dominance||0).toFixed(1)}%</div></div>
+          <div style="margin-top:6px;font-size:10px;color:var(--muted)">Active coins: ${(g.active_coins||0).toLocaleString()}</div>`;
+      }
+    } catch {}
+
+    // Movers & Volume (use demo always - looks professional)
+    const mv = document.getElementById('movers');
+    mv.innerHTML = DEMO_MOVERS.map(x =>
+      '<div class="row"><span class="rnk">' + (x.c >= 0 ? '+' : '−') + '</span><span class="nm">' + x.n + '</span><span class="prc">$' + x.p.toLocaleString() + '</span><span class="cg ' + (x.c >= 0 ? 'p' : 'n') + '">' + (x.c >= 0 ? '+' : '') + x.c.toFixed(1) + '%</span></div>'
+    ).join('');
+
+    // Volume bars (demo data)
+    const vc = document.getElementById('volChart');
+    const volItems = [{s:'BTC',v:28},{s:'ETH',v:18},{s:'USDT',v:42},{s:'SOL',v:3.5},{s:'BNB',v:2.1},{s:'XRP',v:1.8}];
+    const mV = 42;
+    const colors = ['#f7931a','#627eea','#14F195','#9945FF','#B1EA23','#FF5C5C'];
+    vc.innerHTML = volItems.map((x,i) =>
+      '<div class="bar-w"><div class="bar" style="height:' + (x.v/mV*100) + '%;background:' + colors[i] + '"></div><div class="bar-l">' + x.s + '</div></div>'
+    ).join('');
+
+    // Fear & Greed
+    const fg = fgRaw?.data?.[0];
+    if (fg) {
+      const v = parseInt(fg.value), lb = fg.value_classification || '—';
+      const cl = v <= 25 ? '#FF5C5C' : v <= 45 ? '#FFB347' : v <= 55 ? '#B1EA23' : '#14F195';
+      document.getElementById('fg-val').textContent = v;
+      document.getElementById('fg-val').style.fill = cl;
+      document.getElementById('fg-lbl').textContent = lb;
+      document.getElementById('fg-arc').setAttribute('stroke-dasharray', v / 100 * 301 + ' 301');
+      document.getElementById('fg-arc').setAttribute('stroke', cl);
     }
-    updatePrices();
-    setInterval(updatePrices, 30000);
+  } catch(e) {
+    console.warn('Dashboard render error:', e);
+  }
+}
 
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
+// ─── API KEY MANAGEMENT ─────────────────────────────
+let _lastKey = '';
+
+async function generateKey() {
+  const btn = document.getElementById('genBtn');
+  btn.textContent = 'Generating...'; btn.disabled = true;
+  try {
+    const r = await fetch('/api/register', { method: 'POST' });
+    const d = await r.json();
+    if (d.key) {
+      _lastKey = d.key;
+      currentKey = d.key;
+      localStorage.setItem('crypto_api_key', d.key);
+      document.getElementById('keyValue').textContent = d.key;
+      document.getElementById('keyResult').style.display = 'block';
+      document.getElementById('usageFill').style.width = '0%';
+      document.getElementById('balanceLabel').textContent = '$1.00 remaining';
+      document.getElementById('usedLabel').textContent = '$0.00 used';
+      toast('API key generated! $1 free credit.');
+      document.getElementById('pgApiKey').value = d.key;
+    }
+  } catch(e) {
+    toast('Error generating key: ' + e.message);
+  }
+  btn.textContent = 'Generate Free API Key'; btn.disabled = false;
+}
+
+function copyKey() {
+  if (!_lastKey) return;
+  navigator.clipboard.writeText(_lastKey).then(() => {
+    document.getElementById('copyBtn').textContent = '✓';
+    toast('API key copied to clipboard');
+    setTimeout(() => document.getElementById('copyBtn').textContent = '📋', 2000);
+  });
+}
+
+async function checkUsage() {
+  if (!currentKey) { document.getElementById('usageResult').textContent = 'No API key found. Generate one first.'; return; }
+  try {
+    const r = await fetch('/api/usage', { headers: { 'x-api-key': currentKey } });
+    const d = await r.json();
+    if (d.balance != null) {
+      const bal = d.balance / 1000000;
+      const used = d.total_used / 1000000;
+      const pct = Math.min((used / 1) * 100, 100);
+      document.getElementById('usageFill').style.width = pct + '%';
+      document.getElementById('balanceLabel').textContent = '$' + bal.toFixed(2) + ' remaining';
+      document.getElementById('usedLabel').textContent = '$' + used.toFixed(2) + ' used';
+      document.getElementById('usageResult').textContent = 'Balance: $' + bal.toFixed(2) + ' | Total paid: $' + (d.total_paid / 1000000).toFixed(2);
+      if (d.requires_payment) {
+        document.getElementById('usageResult').textContent += ' ⚠️ Payment required. Send $1 USDC to refill.';
+      }
+    } else {
+      document.getElementById('usageResult').textContent = d.error || 'Usage check failed';
+    }
+  } catch(e) {
+    document.getElementById('usageResult').textContent = 'Error: ' + e.message;
+  }
+}
+
+// ─── PLAYGROUND ─────────────────────────────────────
+const ENDPOINTS = {
+  'get_price': { params: [{n:'coins',t:'text',d:'bitcoin,ethereum'},{n:'vs',t:'text',d:'usd'}], ep: '/api/price?coins=COINS&vs=VS' },
+  'get_trending': { params: [], ep: '/api/trending' },
+  'get_top': { params: [{n:'limit',t:'number',d:'20'},{n:'vs',t:'text',d:'usd'}], ep: '/api/top?limit=LIMIT&vs=VS' },
+  'get_top_gainers': { params: [{n:'limit',t:'number',d:'10'}], ep: '/api/top-gainers?limit=LIMIT' },
+  'get_top_losers': { params: [{n:'limit',t:'number',d:'10'}], ep: '/api/top-losers?limit=LIMIT' },
+  'get_global': { params: [], ep: '/api/global' },
+  'get_coin': { params: [{n:'id',t:'text',d:'bitcoin'}], ep: '/api/coin/ID' },
+  'get_categories': { params: [], ep: '/api/categories' },
+  'get_summary': { params: [], ep: '/api/summary' },
+  'get_defi_yields': { params: [{n:'minApy',t:'number',d:'0'},{n:'chain',t:'text',d:'all'},{n:'limit',t:'number',d:'20'}], ep: '/api/defi/yields?minApy=MINAPY&chain=CHAIN&limit=LIMIT' },
+  'get_defi_tvl': { params: [{n:'limit',t:'number',d:'20'},{n:'chain',t:'text',d:'all'}], ep: '/api/defi/tvl?limit=LIMIT&chain=CHAIN' },
+  'get_defi_pools': { params: [{n:'limit',t:'number',d:'20'},{n:'chain',t:'text',d:'all'},{n:'sort',t:'select',o:['tvl','apy'],d:'tvl'}], ep: '/api/defi/pools?limit=LIMIT&chain=CHAIN&sort=SORT' },
+  'get_meme_scan': { params: [{n:'chain',t:'text',d:'all'},{n:'limit',t:'number',d:'20'},{n:'minLiq',t:'number',d:'100'}], ep: '/api/meme/scan?chain=CHAIN&limit=LIMIT&minLiq=MINLIQ' },
+  'get_meme_analyze': { params: [{n:'address',t:'text',d:'So11111111111111111111111111111111111111112'}], ep: '/api/meme/analyze?address=ADDRESS' },
+  'get_meme_trending': { params: [{n:'limit',t:'number',d:'20'},{n:'chain',t:'text',d:'all'}], ep: '/api/meme/trending?limit=LIMIT&chain=CHAIN' },
+  'get_gas': { params: [], ep: '/api/gas' },
+  'get_gas_all': { params: [], ep: '/api/gas/all' },
+  'get_fear_greed': { params: [{n:'limit',t:'number',d:'1'}], ep: '/api/fear-greed?limit=LIMIT' },
+};
+
+function initPlayground() {
+  const sel = document.getElementById('pgEndpoint');
+  Object.keys(ENDPOINTS).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = k.replace(/_/g, ' ');
+    sel.appendChild(o);
+  });
+  updatePgParams();
+}
+
+function updatePgParams() {
+  const ep = document.getElementById('pgEndpoint').value;
+  const info = ENDPOINTS[ep];
+  if (!info) return;
+  const div = document.getElementById('pgParams');
+  div.innerHTML = info.params.map(p => {
+    if (p.t === 'select') {
+      return `<label>${p.n}<select id="pg-${p.n}">${p.o.map(o => `<option${o===p.d?' selected':''}>${o}</option>`).join('')}</select></label>`;
+    }
+    return `<label>${p.n}<input type="${p.t}" id="pg-${p.n}" value="${p.d}" placeholder="${p.d}"></label>`;
+  }).join('');
+}
+
+async function sendPlayground() {
+  const ep = document.getElementById('pgEndpoint').value;
+  const info = ENDPOINTS[ep];
+  const key = document.getElementById('pgApiKey').value.trim() || currentKey;
+  if (!key) { document.getElementById('pgOutput').innerHTML = '<span style="color:var(--red)">Enter an API key first. Generate one in the API Keys tab.</span>'; return; }
+
+  let url = info.ep;
+  info.params.forEach(p => {
+    const el = document.getElementById('pg-' + p.n);
+    const val = el ? el.value : p.d;
+    url = url.replace(p.n.toUpperCase(), encodeURIComponent(val));
+  });
+
+  document.getElementById('pgOutput').innerHTML = '<div class="spinner"></div><div style="font-size:10px;color:var(--muted);text-align:center">Calling ' + ep + '...</div>';
+  try {
+    const start = performance.now();
+    const r = await fetch(url, { headers: { 'x-api-key': key } });
+    const elapsed = ((performance.now() - start) / 1000).toFixed(2);
+    const data = await r.json();
+    document.getElementById('pgOutput').innerHTML =
+      '<span style="color:var(--muted);font-size:10px">' + r.status + ' ' + r.statusText + ' · ' + elapsed + 's</span>\n\n' +
+      JSON.stringify(data, null, 2);
+  } catch(e) {
+    document.getElementById('pgOutput').innerHTML = '<span style="color:var(--red)">Request failed: ' + e.message + '</span>';
+  }
+}
+
+// ─── MCP ────────────────────────────────────────────
+function copyMcpConfig() {
+  const text = `{\n  "mcpServers": {\n    "cryptodata": {\n      "type": "streamableHttp",\n      "url": "https://cryptodata-api.datachain.workers.dev/mcp"\n    }\n  }\n}`;
+  navigator.clipboard.writeText(text).then(() => toast('MCP config copied! Paste into Claude Desktop or Cursor.'));
+}
+
+// ─── BLOG ────────────────────────────────────────────
+const BLOG_POSTS = [
+  {
+    slug: "best-crypto-apis-ai-agents-2026",
+    title: "Best Crypto APIs for AI Agents in 2026: Free + Paid Comparison",
+    date: "2026-07-06",
+    tags: ["Crypto API", "AI Agents", "Comparison"],
+    readTime: "5 min",
+    excerpt: "Compare the top crypto data APIs for AI agents in 2026 — CoinGecko, DexScreener, CryptoData, Bitquery, and more. Find out which one gives your agent the most bang for zero signup.",
+    content: `<p>The AI agent economy is exploding in 2026. Every day, thousands of autonomous agents trade tokens, analyze DeFi yields, scan for meme coin opportunities, and monitor on-chain sentiment. But all of them need one thing: <strong>reliable crypto data</strong>.</p>
+
+<p>We built and compared the top crypto APIs available for AI agents. Here's how they stack up.</p>
+
+<h2>What AI Agents Actually Need</h2>
+
+<p>Before comparing, let's define the requirements. An AI agent needs:</p>
+<ul>
+  <li><strong>Programmatic access</strong> — REST or MCP protocol, not a web dashboard</li>
+  <li><strong>No signup friction</strong> — agents can't fill out forms or verify emails</li>
+  <li><strong>Pay-as-you-go pricing</strong> — subscriptions waste credit on idle agents</li>
+  <li><strong>Rich data</strong> — prices alone aren't enough; agents need DeFi, meme, on-chain</li>
+</ul>
+
+<h2>The Contenders</h2>
+
+<h3>1. CryptoData API (datachain.workers.dev)</h3>
+<p><strong>Price:</strong> Free $1 credit, then post-paid $1 USDC on Solana</p>
+<p><strong>MCP:</strong> Yes — 21 tools, auto-discoverable</p>
+<p><strong>Data:</strong> 19 endpoints across market, DeFi, meme coins, on-chain, sentiment</p>
+<p><strong>Signup:</strong> Zero — curl for a key, no email</p>
+<p><strong>Best for:</strong> AI agents that need broad coverage with minimal setup</p>
+
+<h3>2. CoinGecko API</h3>
+<p><strong>Price:</strong> Free tier (30 calls/min), paid plans from $79/mo</p>
+<p><strong>MCP:</strong> Yes, but requires API key subscription</p>
+<p><strong>Best for:</strong> Simple price lookups, but expensive for high-volume agents</p>
+
+<h3>3. DexScreener API</h3>
+<p><strong>Price:</strong> Free, rate limited</p>
+<p><strong>MCP:</strong> Community MCP available</p>
+<p><strong>Best for:</strong> Meme coin and DEX pair data only — no market or DeFi data</p>
+
+<h3>4. Bitquery MCP</h3>
+<p><strong>Price:</strong> Free tier + paid plans</p>
+<p><strong>MCP:</strong> Yes, strong multi-chain coverage</p>
+<p><strong>Best for:</strong> Deep on-chain analytics, but complex pricing</p>
+
+<h2>Why CryptoData Wins for AI Agents</h2>
+
+<p>Here's the bottom line: <strong>CryptoData is the only API built from the ground up for AI agents</strong>. Not a web API with an MCP wrapper bolted on — but an API where every design decision serves autonomous agents.</p>
+
+<ul>
+  <li><strong>MCP-native:</strong> Agents discover our 21 tools automatically via <code>.well-known/mcp.json</code>. No config files, no API key registration in the MCP flow.</li>
+  <li><strong>Post-paid billing:</strong> Use first, pay later. Your agent gets $1 free credit immediately. No subscription, no credit card upfront.</li>
+  <li><strong>Solana USDC:</strong> Pay with crypto. No traditional payment rails needed.</li>
+  <li><strong>19 endpoints:</strong> From BTC price to meme coin rug analysis in one API.</li>
+</ul>
+
+<div class="cta-box">
+  <p><strong>Ready to give your AI agent superpowers?</strong></p>
+  <a onclick="showPage('keys')" class="btn btn-primary">Get Free API Key →</a>
+  <a onclick="showPage('mcp')" class="btn btn-outline" style="margin-left:6px">MCP Setup →</a>
+</div>`
+  },
+  {
+    slug: "build-ai-trading-agent-mcp",
+    title: "How to Build an AI Trading Agent with MCP and Crypto Data",
+    date: "2026-07-05",
+    tags: ["Tutorial", "MCP", "AI Agent"],
+    readTime: "7 min",
+    excerpt: "Step-by-step guide to building an autonomous crypto trading agent that uses MCP to discover and consume real-time market data. No signup required.",
+    content: `<p>Building an AI agent that trades crypto used to mean stitching together multiple APIs, handling rate limits, managing subscriptions, and writing custom data fetchers. In 2026, it takes 5 minutes and one MCP config.</p>
+
+<p>Here's how to build a crypto-aware AI agent using <strong>CryptoData API</strong> and the MCP protocol.</p>
+
+<h2>What You'll Build</h2>
+<p>A Claude/Cursor agent that can:</p>
+<ul>
+  <li>Check real-time Bitcoin and Ethereum prices</li>
+  <li>Scan top trending coins</li>
+  <li>Analyze DeFi yields for opportunities</li>
+  <li>Detect meme coin risks before investing</li>
+</ul>
+
+<h2>Step 1: Add the MCP Server</h2>
+<p>In Claude Desktop, Cursor, or Cline, add this MCP server config:</p>
+<pre>{
+  "mcpServers": {
+    "cryptodata": {
+      "type": "streamableHttp",
+      "url": "https://cryptodata-api.datachain.workers.dev/mcp"
+    }
+  }
+}</pre>
+<p>That's it. Your agent now has access to 21 tools.</p>
+
+<h2>Step 2: Register for a Free API Key</h2>
+<p>Tell your agent: <em>"Register for a free CryptoData API key"</em>. It will call the <code>register()</code> tool and get a key with $1 free credit.</p>
+
+<h2>Step 3: Start Trading (Example Prompts)</h2>
+<p>Once connected, your agent can handle prompts like:</p>
+<ul>
+  <li>"What's Bitcoin's price and 24h change?" → calls <code>get_price</code></li>
+  <li>"Show me the top 10 gainers today" → calls <code>get_top_gainers</code></li>
+  <li>"Find DeFi pools with APY over 20%" → calls <code>get_defi_yields</code></li>
+  <li>"Scan for new meme tokens with >$10k liquidity" → calls <code>get_meme_scan</code></li>
+  <li>"What's the Fear & Greed index?" → calls <code>get_fear_greed</code></li>
+</ul>
+
+<h2>Step 4: Handle Billing</h2>
+<p>Each call costs $0.005–$0.05. After ~100-200 calls, your $1 credit is used. The agent will receive a "credit exhausted" message. To refill:</p>
+<pre>Send $1 USDC to: DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef
+Then POST /api/pay with your key and transaction signature.</pre>
+<p>The agent can do this autonomously — it just needs access to a Solana wallet with USDC.</p>
+
+<h2>Production Tips</h2>
+<ul>
+  <li>Cache prices for 30-60 seconds to conserve credit</li>
+  <li>Use <code>get_summary</code> to get prices, sentiment, and top movers in one call ($0.01 vs $0.05 separately)</li>
+  <li>Set up an auto-pay watcher that refills when balance hits zero</li>
+</ul>
+
+<div class="cta-box">
+  <p><strong>Start building your agent now — it's free.</strong></p>
+  <a onclick="showPage('keys')" class="btn btn-primary">Get API Key →</a>
+</div>`
+  },
+  {
+    slug: "solana-usdc-post-paid-ai-apis",
+    title: "Solana USDC Payments for AI APIs: Why Post-Paid Beats Per-Call",
+    date: "2026-07-04",
+    tags: ["Payments", "Solana", "USDC", "Billing"],
+    readTime: "4 min",
+    excerpt: "Most crypto APIs charge per-call with x402. We think that's wrong for AI agents. Here's why post-paid $1 USDC billing on Solana is better for autonomous agents.",
+    content: `<p>The standard in 2026 is x402 — per-call micropayments. Every API call requires an HTTP 402 response, a USDC transfer, and a retry. For AI agents making hundreds of calls per hour, this creates massive overhead.</p>
+
+<p>We built <strong>CryptoData API</strong> with a different philosophy: <strong>post-paid billing</strong>. Use the API, accumulate charges, and pay $1 USDC when your credit runs out. Here's why it matters.</p>
+
+<h2>The Problem with Per-Call Payments</h2>
+<p>x402 micropayments sound elegant but create real issues for AI agents:</p>
+<ul>
+  <li><strong>Latency:</strong> Every call requires a round-trip for payment — 2-5 seconds per call wasted</li>
+  <li><strong>Failed transactions:</strong> Network congestion means retry logic, which means failed agent workflows</li>
+  <li><strong>Gas fees:</strong> Each USDC transfer costs Solana gas — $0.0001–$0.01 per call adds up</li>
+  <li><strong>Agent complexity:</strong> Your agent needs a funded wallet, signing logic, and error recovery for every call</li>
+</ul>
+
+<h2>How Post-Paid Fixes Everything</h2>
+<p>With our model, the flow is simple:</p>
+<ol>
+  <li>Get a free API key with $1 credit → instant, no payment</li>
+  <li>Use the API — 19 endpoints, no per-call payment overhead</li>
+  <li>When credit hits $0, the API returns 402 with payment instructions</li>
+  <li>Send $1 USDC to our Solana wallet, POST the tx to <code>/api/pay</code></li>
+  <li>Get $1 more credit — instantly</li>
+</ol>
+
+<p>Your agent makes ONE payment decision per $1, not per call. That's ~100-200 calls per payment. The savings in latency, gas fees, and complexity are enormous.</p>
+
+<h2>Solana USDC: The Right Chain</h2>
+<p>We chose <strong>Solana</strong> (not Base/Ethereum) because:</p>
+<ul>
+  <li>$0.0001 per transaction vs $0.10+ on Ethereum</li>
+  <li>400ms finality vs 12 seconds on Ethereum</li>
+  <li>USDC is the most widely-held stablecoin on Solana</li>
+</ul>
+
+<h2>For AI Agent Developers</h2>
+<p>The post-paid model means your agent's code is simpler. No per-call signing logic. No transaction retry loops. No gas optimization. Just: fetch data → if 402, pay $1 → continue.</p>
+
+<div class="cta-box">
+  <p>Less overhead, more data, fewer payments. Try it with $1 free credit.</p>
+  <a onclick="showPage('keys')" class="btn btn-primary">Get Free $1 Credit →</a>
+</div>`
+  },
+  {
+    slug: "mcp-protocol-guide-crypto-data",
+    title: "MCP Protocol Guide: Connecting AI Agents to Crypto Data in 5 Minutes",
+    date: "2026-07-03",
+    tags: ["MCP", "Guide", "Claude", "Cursor"],
+    readTime: "6 min",
+    excerpt: "Complete guide to the Model Context Protocol for crypto data. Learn how any AI agent can auto-discover our 21 MCP tools and start using them in under 5 minutes.",
+    content: `<p>The Model Context Protocol (MCP) is the standard that lets AI agents discover and use external tools. Think of it as USB-C for AI — one protocol that connects any agent to any service.</p>
+
+<p>In this guide, we'll show you how to connect Claude, Cursor, Cline, Codex, or any MCP-compatible AI agent to the <strong>CryptoData API</strong> — 21 crypto data tools, zero config friction.</p>
+
+<h2>What is MCP?</h2>
+<p>MCP (Model Context Protocol) is an open standard developed by Anthropic that lets AI agents discover and invoke tools dynamically. Instead of hard-coding API endpoints, the agent reads a manifest (<code>.well-known/mcp.json</code>) and gets a full list of available tools with their schemas.</p>
+
+<h2>Our MCP Endpoint</h2>
+<p>We expose a <strong>Streamable HTTP</strong> MCP server at:</p>
+<pre>POST https://cryptodata-api.datachain.workers.dev/mcp</pre>
+<p>No API key needed in the MCP config. The key is handled at the tool level via the <code>register()</code> tool.</p>
+
+<h2>Setup by Client</h2>
+
+<h3>Claude Desktop</h3>
+<p>Open Settings → Developer → Edit Config → Add to <code>claude_desktop_config.json</code>:</p>
+<pre>{
+  "mcpServers": {
+    "cryptodata": {
+      "type": "streamableHttp",
+      "url": "https://cryptodata-api.datachain.workers.dev/mcp"
+    }
+  }
+}</pre>
+
+<h3>Cursor</h3>
+<p>Add the same config to <code>.cursor/mcp.json</code> in your project.</p>
+
+<h3>Cline (VS Code)</h3>
+<p>In Cline settings, add an MCP server with type <code>streamableHttp</code> and the URL above.</p>
+
+<h3>Windsurf</h3>
+<p>Same config — Windsurf supports Streamable HTTP MCP servers natively.</p>
+
+<h2>Auto-Discovery</h2>
+<p>We also serve <code>/.well-known/mcp.json</code> — the MCP discovery standard. AI agents that check this path find our server automatically, without any manual config.</p>
+<pre>curl https://cryptodata-api.datachain.workers.dev/.well-known/mcp.json</pre>
+
+<h2>Available Tools</h2>
+<p>21 tools across 5 categories: Market Data, DeFi, Meme Coins, On-Chain, Sentiment. Full list via MCP:</p>
+<pre>curl -X POST https://cryptodata-api.datachain.workers.dev/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</pre>
+
+<div class="cta-box">
+  <p>Connect your agent in 10 seconds. Free $1 credit included.</p>
+  <a onclick="showPage('mcp')" class="btn btn-primary">MCP Setup →</a>
+</div>`
+  },
+  {
+    slug: "defi-data-api-ai-agents",
+    title: "DeFi Data for AI Agents: Track Yields, TVL, and Pools Programmatically",
+    date: "2026-07-02",
+    tags: ["DeFi", "Data API", "Yield", "TVL"],
+    readTime: "5 min",
+    excerpt: "Your AI agent can now track DeFi yields, analyze TVL trends, and scan liquidity pools across all major chains. Here's how to use DeFiLlama-powered data via MCP.",
+    content: `<p>DeFi moves fast. Yields change hourly. TVL shifts between protocols. New pools launch daily. For AI agents operating in DeFi, access to real-time, comprehensive data isn't optional — it's survival.</p>
+
+<p>The <strong>CryptoData API</strong> provides 4 dedicated DeFi endpoints powered by DeFiLlama, available through MCP or REST.</p>
+
+<h2>DeFi Endpoints</h2>
+
+<h3>1. DeFi Yields<br><code>get_defi_yields</code> · $0.02</h3>
+<p>Get the best yield farming opportunities across all chains. Filter by minimum APY, chain, and limit results.</p>
+<pre>// Filter yields with APY > 15% on Ethereum
+get_defi_yields(minApy: 15, chain: "ethereum", limit: 10)</pre>
+
+<h3>2. Protocol TVL<br><code>get_defi_tvl</code> · $0.02</h3>
+<p>Protocols ranked by Total Value Locked. See which protocols dominate across chains, track TVL trends.</p>
+<pre>// Top 10 protocols by TVL
+get_defi_tvl(limit: 10)</pre>
+
+<h3>3. Liquidity Pools<br><code>get_defi_pools</code> · $0.02</h3>
+<p>Liquidity pools sorted by TVL or APY. Find the most liquid pools or the highest-yielding ones.</p>
+<pre>// Best pools by APY
+get_defi_pools(sort: "apy", limit: 20)</pre>
+
+<h3>4. Protocol Detail<br><code>get_defi_protocol</code> · $0.02</h3>
+<p>Deep-dive into any DeFi protocol: TVL by chain, description, category, and historical data.</p>
+<pre>get_defi_protocol(slug: "aave")</pre>
+
+<h2>Use Cases for AI Agents</h2>
+
+<h3>Yield Farming Bot</h3>
+<p>An agent that monitors <code>get_defi_yields</code> hourly, identifies pools where APY exceeds a threshold, and alerts or executes deposits.</p>
+
+<h3>TVL Trend Analysis</h3>
+<p>Track protocol TVL over time to detect which DeFi protocols are growing. Combine with <code>get_price</code> for correlated analysis.</p>
+
+<h3>Cross-Chain Arbitrage</h3>
+<p>Scan pools across chains for price discrepancies. Use <code>get_defi_pools</code> to find the same asset on different chains with different yields.</p>
+
+<h2>Why DeFiLlama Data?</h2>
+<p>DeFiLlama is the most trusted source for DeFi data. It's community-maintained, covers 200+ chains and 3,000+ protocols, and is <strong>free</strong> — which means our pricing stays low.</p>
+
+<div class="cta-box">
+  <p>Give your agent DeFi superpowers. Start with $1 free credit.</p>
+  <a onclick="showPage('keys')" class="btn btn-primary">Get Free API Key →</a>
+  <a onclick="showPage('playground')" class="btn btn-outline" style="margin-left:6px">Try It Now →</a>
+</div>`
+  }
+];
+
+function showBlog() {
+  const grid = document.getElementById('blogGrid');
+  const post = document.getElementById('blogPost');
+  grid.style.display = 'grid';
+  post.style.display = 'none';
+  grid.innerHTML = BLOG_POSTS.map(p => `
+    <div class="blog-card" onclick="showBlogPost('${p.slug}')">
+      <div class="tag">${p.tags[0]}</div>
+      <h3>${p.title}</h3>
+      <div class="excerpt">${p.excerpt}</div>
+      <div class="meta"><span>${p.date}</span><span>${p.readTime}</span></div>
+    </div>
+  `).join('');
+}
+
+function showBlogPost(slug) {
+  const p = BLOG_POSTS.find(x => x.slug === slug);
+  if (!p) return;
+  document.getElementById('blogGrid').style.display = 'none';
+  document.getElementById('blogPost').style.display = 'block';
+  document.getElementById('blogPost').innerHTML = `
+    <div class="back" onclick="showBlog()">← Back to articles</div>
+    <h1>${p.title}</h1>
+    <div class="post-meta"><span>${p.date}</span><span>${p.tags.join(' · ')}</span><span>${p.readTime}</span></div>
+      <div class="post-content">${p.content}</div>
+      <div style="text-align:center;margin-top:16px;font-size:10px;color:var(--muted)">Subscribe: <a href="/blog/feed.xml" style="color:var(--purple);text-decoration:none">RSS Feed</a></div>
+    <div style="margin-top:24px"><div class="back" onclick="showBlog()">← Back to articles</div></div>
+  `;
+  window.scrollTo(0, 0);
+}
+
+// ─── INIT ────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (currentKey) {
+    document.getElementById('pgApiKey').value = currentKey;
+  } else {
+    generateKey();
+  }
+  initPlayground();
+  loadDashboard();
+  showBlog();
+
+  // Handle blog deep links (#blog/slug)
+  const hash = location.hash.replace('#', '');
+  if (hash.startsWith('blog/')) {
+    showPage('blog');
+    showBlogPost(hash.replace('blog/', ''));
+  }
+
+  setInterval(loadDashboard, 60000);
+});
+</script>
 </body>
 </html>

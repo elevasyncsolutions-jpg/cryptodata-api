@@ -1,0 +1,130 @@
+═══ CHAINBOSS X POSTS (FRESH) ═══
+Brand: ChainBoss | Handle: @Kristiamanekmu | Domain: cryptoboss.space
+CLI: npm install -g chainboss-cli | API: cryptodata-api.datachain.workers.dev
+
+────────────────────────────────────
+Post 1 (CLI launch)
+────────────────────────────────────
+
+Just dropped the ChainBoss CLI 🚀
+
+npm install -g chainboss-cli
+→ chainboss register (free key)
+→ chainboss price BTC,ETH
+→ chainboss gas
+→ chainboss meme-scan
+→ chainboss fear-greed
+
+21 MCP tools. Post-paid $1 USDC. Zero signup.
+AI agents find us automatically.
+
+→ cryptoboss.space
+
+#chainboss #CLI #MCP #crypto #Solana
+
+────────────────────────────────────
+Post 2 (CLI + MCP combo)
+────────────────────────────────────
+
+Your AI agent + ChainBoss = unstoppable.
+
+Terminal: chainboss price bitcoin,ethereum
+Claude: drop in 1 MCP config → 21 tools
+
+Both backed by the same post-paid $1 USDC billing.
+
+Free $1 credit to start. No subscription. No email.
+
+Install → npm install -g chainboss-cli
+Docs → cryptoboss.space
+
+#MCP #AIagents #Solana #USDC #crypto
+
+────────────────────────────────────
+Post 3 (Comparison with tag)
+────────────────────────────────────
+
+@CoinGeckoAPI charges $79/mo
+@Moralis charges $56/mo
+@AlchemyPlatform charges $49/mo
+
+ChainBoss: $1 post-paid USDC.
+
+Same data (CoinGecko, DeFiLlama, DexScreener).
+21 MCP tools. Zero signup. AI agent native.
+
+One-time $1 vs monthly subscriptions 🤷
+
+→ cryptoboss.space
+
+#crypto #MCP #AI #Solana #building
+
+────────────────────────────────────
+Post 4 (The "post-paid" pitch)
+────────────────────────────────────
+
+"Post-paid" = you get free credit first, pay later.
+
+ChainBoss gives every API key $1 free credit.
+When it runs out → send $1 USDC → keep going.
+
+No prepayment. No monthly bill. No surprise.
+
+This is how APIs should work on Solana.
+
+→ cryptoboss.space
+
+#Solana #USDC #crypto #MCP #API
+
+────────────────────────────────────
+Post 5 (Performance flex)
+────────────────────────────────────
+
+ChainBoss benchmarks:
+
+• <50ms avg response time
+• 99.9% uptime (Cloudflare Workers)
+• 330 edge locations
+• 21 MCP tools auto-discovered
+• $1 post-paid USDC billing
+
+Built for speed. Built for agents.
+
+→ cryptoboss.space
+
+#performance #MCP #cloudflare #crypto #AI
+
+────────────────────────────────────
+Post 6 (Dev story)
+────────────────────────────────────
+
+Built a crypto API for AI agents on Cloudflare Workers.
+
+21 tools → prices, DeFi, meme analysis, gas, sentiment
+Zero signup → one click key generation
+Post-paid → $1 USDC, pay after you use
+MCP native → agents discover tools automatically
+
+CLI: npm install -g chainboss-cli
+Web: cryptoboss.space
+
+RT + follow → free API key with $1 credit 🔑
+
+#buildinpublic #indiehacker #MCP #crypto
+
+────────────────────────────────────
+Post 7 (Meme / rug angle)
+────────────────────────────────────
+
+Friend: "I found this new token, is it safe?"
+Me: "chainboss meme-analyze <address>"
+
+Rug risk scored 0-11 with detailed flags.
+Liquidity, age, concentration, wash trading heuristics.
+
+Your AI agent can do this in 1 tool call.
+You can do it in 1 CLI command.
+
+→ cryptoboss.space
+
+#memecoin #rugcheck #crypto #MCP #CLI

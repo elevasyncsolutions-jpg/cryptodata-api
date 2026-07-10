@@ -136,8 +136,13 @@ async function checkBilling(request, path) {
   const price = getPrice(path);
   if (price === null) return null;
 
+  // Basic data endpoints work without an API key (zero-friction REST)
+  const FREE_DATA = ["/api/price","/api/trending","/api/top","/api/top-gainers","/api/top-losers","/api/global","/api/categories","/api/search","/api/exchanges","/api/summary","/api/public/market"];
+
   const key = request.headers.get("x-api-key") || request.headers.get("X-Api-Key");
   if (!key) {
+    // If no key and this is a free data endpoint, serve without billing
+    if (FREE_DATA.includes(path)) return null;
     return new Response(JSON.stringify({
       error: "API Key Required", message: "Get a free key at POST /api/register or use MCP register tool. Pass via x-api-key header.",
       register: "POST /api/register",

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9945FF"/>
+      <stop offset="50%" stop-color="#14F195"/>
+      <stop offset="100%" stop-color="#EC4DFF"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#0ae07a"/>
+      <stop offset="100%" stop-color="#14F195"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark circular BG -->
+  <circle cx="200" cy="200" r="198" fill="#0a0a14"/>
+  <circle cx="200" cy="200" r="198" fill="none" stroke="url(#g)" stroke-width="3" opacity="0.2"/>
+
+  <!-- 
+    LOGO CONCEPT: The "C" that IS the product.
+    Each part of the letter C is a product element:
+    - Vertical bar = candlestick (data)
+    - Arc = API flow (connection)
+    - Terminal dot = hexagon (blockchain)
+  -->
+
+  <!-- 1. CANDLESTICK (the vertical of the C) -->
+  <rect x="135" y="90" width="28" height="180" rx="6" fill="url(#g2)" filter="url(#glow)"/>
+  <rect x="142" y="56" width="14" height="28" rx="4" fill="url(#g2)"/>
+  <line x1="149" y1="44" x2="149" y2="56" stroke="#14F195" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="149" cy="34" r="6" fill="#14F195" filter="url(#glow)"/>
+  <circle cx="149" cy="34" r="2.5" fill="white" opacity="0.8"/>
+
+  <!-- 2. C CURVE (API connection arc) -->
+  <path d="M163,90 C240,80 290,120 290,200 C290,280 240,320 163,310" 
+        fill="none" stroke="url(#g)" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- 3. HEXAGON NODE (blockchain terminal dot of the C) -->
+  <polygon points="215,310 240,298 240,278 215,266 190,278 190,298" 
+           fill="url(#g)" filter="url(#glow)"/>
+  <polygon points="215,304 234,295 234,281 215,272 196,281 196,295" 
+           fill="#0a0a14"/>
+  <circle cx="215" cy="288" r="4" fill="#14F195"/>
+
+  <!-- 4. NEURAL DOT (AI agent hovering above) -->
+  <circle cx="155" cy="16" r="5" fill="#14F195" opacity="0.4"/>
+  <circle cx="155" cy="16" r="10" fill="#14F195" opacity="0.08"/>
+</svg>

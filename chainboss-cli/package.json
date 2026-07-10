@@ -1,0 +1,27 @@
+{
+  "name": "chainboss-cli",
+  "version": "1.0.0",
+  "description": "CLI for ChainBoss — the crypto API for AI agents. 21 MCP tools, post-paid $1 USDC on Solana.",
+  "bin": {
+    "chainboss": "index.js"
+  },
+  "keywords": [
+    "crypto",
+    "API",
+    "MCP",
+    "AI agents",
+    "USDC",
+    "Solana",
+    "DeFi",
+    "blockchain",
+    "cli"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ]
+}

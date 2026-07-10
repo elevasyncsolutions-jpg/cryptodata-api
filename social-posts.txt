@@ -1,0 +1,214 @@
+══════════════════════════════════════
+  THREADS POSTS
+══════════════════════════════════════
+
+── Threads 1 (build in public) ──
+
+I built a crypto API for AI agents on Cloudflare Workers.
+Zero signup. Post-paid USDC. 21 MCP tools.
+
+Here's why:
+
+Most crypto APIs force you to:
+• Create an account with email
+• Pick a monthly subscription
+• Read documentation for hours
+
+I wanted something different.
+
+So I built CryptoData API on Cloudflare Workers free tier.
+21 MCP tools. Auto-discovery via MCP protocol.
+Post-paid $1 USDC on Solana. No subscription.
+
+Your AI agent finds it, uses it, pays when done.
+No signup. No email. No KYC.
+
+Listed on the official MCP Registry.
+Free $1 credit on every API key.
+
+cryptodata-api.datachain.workers.dev
+
+#MCP #Crypto #AI #Solana #buildinpublic
+
+── Threads 2 (quick value) ──
+
+Give your AI agent real-time crypto data in 10 seconds:
+
+1. curl -X POST https://cryptodata-api.datachain.workers.dev/api/register
+2. Paste the key
+3. Add MCP config to Claude/Cursor
+
+21 tools:
+→ BTC/ETH/SOL prices
+→ DeFi TVL (3000+ protocols)
+→ Meme coin scanner
+→ On-chain analytics
+→ Fear & Greed index
+→ Social sentiment
+
+Post-paid $1 USDC. Built on Solana.
+Listed on the official MCP Registry.
+
+cryptodata-api.datachain.workers.dev
+
+#crypto #AI #MCP #Solana #web3
+
+── Threads 3 (hot take) ──
+
+Hot take: subscription APIs are dying for AI agents.
+
+Agents don't have email accounts.
+Agents don't manage monthly billing.
+Agents just need data → pay → move on.
+
+That's why I built CryptoData API with post-paid USDC.
+Your agent calls the API, uses credits, tops up when empty.
+
+No signup. No subscription. Just crypto.
+
+21 MCP tools live on Cloudflare.
+Listed on the official MCP Registry.
+
+cryptodata-api.datachain.workers.dev
+
+#MCP #crypto #AI #Solana #USDC #web3
+
+══════════════════════════════════════
+  REDDIT POSTS
+══════════════════════════════════════
+
+── Reddit r/cryptodev ──
+
+Title: I built a crypto API for AI agents — 21 MCP tools, post-paid USDC, zero signup
+
+Body:
+Hey r/cryptodev,
+
+I got tired of subscription APIs and built something different — a crypto intelligence API designed specifically for AI agents.
+
+Here's the deal:
+• 21 data endpoints (prices, DeFi, meme coins, on-chain, sentiment)
+• MCP protocol — agents discover it automatically
+• Post-paid $1 USDC on Solana (no per-call payments)
+• Free $1 credit on every key (~100-200 calls)
+• Zero signup, zero email, zero subscription
+• Listed on the official MCP Registry
+
+MCP config (paste into Claude Desktop / Cursor):
+```json
+{"mcpServers":{"cryptodata":{"type":"streamableHttp","url":"https://cryptodata-api.datachain.workers.dev/mcp"}}}
+```
+
+Or get a key with one curl:
+curl -X POST https://cryptodata-api.datachain.workers.dev/api/register
+
+Built on Cloudflare Workers free tier. Would love feedback!
+
+── Reddit r/AI_Agents ──
+
+Title: PSA — there's now a crypto MCP that agents can use without signup. Post-paid USDC.
+
+Body:
+Hey r/AI_Agents,
+
+If your agent needs real-time crypto data (BTC/ETH/SOL prices, DeFi TVL, meme coin analysis, on-chain sentiment), check this out:
+
+CryptoData API — 21 MCP tools, zero signup, post-paid $1 USDC billing.
+
+Your agent connects via Streamable HTTP in one config line:
+```json
+{"mcpServers":{"cryptodata":{"type":"streamableHttp","url":"https://cryptodata-api.datachain.workers.dev/mcp"}}}
+```
+
+Free $1 credit (~100-200 calls) on every key — no subscription, no email.
+
+Also listed on the official MCP Registry if you browse there.
+
+Direct link: https://cryptodata-api.datachain.workers.dev
+
+── Reddit r/Solana ──
+
+Title: Built a Solana post-paid API for AI agents — $1 USDC threshold, zero signup
+
+Body:
+Hey r/Solana,
+
+I built CryptoData API — 21 MCP tools for crypto data with post-paid $1 USDC billing on Solana mainnet.
+
+How it works:
+1. Your agent calls the API (gets a free $1 credit)
+2. When credit runs out, it sends $1 USDC to the treasury
+3. Credits replenish instantly
+4. No subscription, no email, no KYC
+
+The payment flow uses the Leash facilitator on Solana for x402 settlements.
+
+21 tools covering:
+• Real-time prices (15K+ coins)
+• DeFi TVL across 3000+ protocols
+• Meme coin scanner (DexScreener)
+• On-chain whale tracking
+• Fear & Greed index
+• Social sentiment
+
+Listed on the official MCP Registry.
+Built on Cloudflare Workers.
+
+https://cryptodata-api.datachain.workers.dev
+
+Would love feedback from the Solana dev community!
+
+══════════════════════════════════════
+  INSTAGRAM POSTS
+══════════════════════════════════════
+
+── Instagram Post 1 (carousel concept) ──
+
+**Image 1:** Cover - "Your AI Agent Needs Crypto Data"
+**Image 2:** Screenshot of dashboard showing BTC $63K / ETH $1.7K / SOL $81
+**Image 3:** The MCP config code (one line)
+**Image 4:** "21 Tools • Zero Signup • $1 USDC"
+
+Caption:
+Built a crypto API for AI agents on @Cloudflare ☁️
+
+21 MCP tools • Post-paid $1 USDC • Zero signup
+Listed on the official MCP Registry
+
+Your agent discovers it automatically via MCP protocol.
+No email. No subscription. Just crypto.
+
+Link in bio → cryptodata-api.datachain.workers.dev
+
+#crypto #AI #MCP #Solana #USDC #web3 #Cloudflare #buildinpublic #indiehacker #cryptocurrency #aitools
+
+── Instagram Post 2 (reel idea) ──
+
+**Reel concept:** Screen recording of:
+1. Opening Claude Desktop
+2. Adding MCP config
+3. Asking "what's Bitcoin price?"
+4. Agent calls the API
+5. Shows the response
+
+**Text overlay:** "Your AI agent can now get crypto data in 10 seconds"
+
+Caption:
+This is CryptoData API — 21 MCP tools, zero signup, post-paid USDC on Solana.
+
+Built on Cloudflare Workers. Listed on the official MCP Registry.
+
+Free $1 credit to start. No subscription ever.
+
+Link in bio 🔗
+
+#crypto #AI #MCP #Solana #Claude #aitools #buildinpublic
+
+── Instagram Post 3 (story idea) ──
+
+**Story:** Poll - "Does your AI agent use crypto data?"
+Options: Yes / No / I don't have an AI agent yet
+
+**After poll:** 
+"Built this for you — 21 MCP tools, free $1 credit, post-paid USDC"
+Link: cryptodata-api.datachain.workers.dev

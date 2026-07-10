@@ -7,7 +7,7 @@ info:
     name: CryptoData API
   x-agent-Provider: CryptoData
 servers:
-  - url: https://cryptodata-api.elevasyncsolutions.workers.dev
+  - url: https://cryptodata-api.datachain.workers.dev
     description: Production server (Cloudflare Workers)
 
 paths:
