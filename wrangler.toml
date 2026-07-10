@@ -2,3 +2,20 @@ name = "cryptodata-api"
 main = "worker.js"
 compatibility_date = "2025-04-01"
 workers_dev = true
+
+routes = [
+  { pattern = "cryptoboss.space", custom_domain = true },
+]
+
+[[kv_namespaces]]
+binding = "CRYPTODATA_KV"
+id = "f5a1cddfd3eb43fcbfa2e7c4884dadab"
+
+[triggers]
+crons = ["0 0 * * *", "0 6 * * *", "0 12 * * *", "0 18 * * *"]
+
+[vars]
+TELEGRAM_BOT_TOKEN = ""
+TELEGRAM_CHANNEL_ID = ""
+AUTO_POST_TWITTER = "false"
+AUTO_POST_TELEGRAM = "false"

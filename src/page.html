@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TEXDTPR6HC"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','G-TEXDTPR6HC')
+</script>
+<title>CryptoBoss — Crypto API for AI Agents | MCP Tools | Solana USDC Billing</title>
+<meta name="description" content="Best crypto API for AI agents in 2026. 42+ MCP tools across 10 categories: Market Data, DeFi, Security, On-Chain, Portfolio, Alerts, Sentiment, Trading, Memes, Gas. Zero signup. Post-paid $1 USDC on Solana. Built for Claude, Cursor, Cline, Windsurf.">
+<meta name="keywords" content="crypto API for AI agents, MCP crypto tools, AI agent crypto data API, Solana USDC API billing, MCP server for crypto, crypto data API no signup, AI trading agent API, meme token rug check API, DeFi yield API for AI, multi-chain gas tracker API, post-paid crypto API, MCP tools for Claude, crypto API for Cursor, best crypto API for AI agents 2026, CryptoBoss API, contract audit API, whale tracking API, portfolio tracker API, price alerts API, arbitrage scanner API, crypto categories MCP tools">
+<meta property="og:title" content="CryptoBoss — Best Crypto API for AI Agents">
+<meta property="og:description" content="Best crypto API for AI agents in 2026. 42+ MCP tools across 10 categories: Market Data, DeFi, Security, On-Chain, Portfolio, Alerts, Sentiment, Trading, Memes, Gas. Zero signup. Post-paid $1 USDC on Solana. Built for Claude, Cursor, Cline, Windsurf.">
+<meta property="og:url" content="https://cryptoboss.space">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CryptoBoss — Best Crypto API for AI Agents">
+<meta name="twitter:description" content="42+ MCP tools for AI agents. Zero signup. Post-paid $1 USDC on Solana.">
+<meta name="robots" content="index,follow">
+<meta name="google-site-verification" content="fzvYv1fmPTByULeqrvHrD9p_aof04wS2yjPq4VcBz6g">
+<link rel="canonical" href="https://cryptoboss.space/">
+<link rel="alternate" type="application/rss+xml" title="CryptoBoss Blog" href="/blog/feed.xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CryptoBoss","url":"https://cryptoboss.space","description":"Best crypto API for AI agents in 2026. 42+ MCP tools across 10 categories: Market Data, DeFi, Security, On-Chain, Portfolio, Alerts, Sentiment, Trading, Memes, Gas. Zero signup. Post-paid $1 USDC on Solana. Built for Claude, Cursor, Cline, Windsurf.","applicationCategory":"DeveloperApplication","operatingSystem":"All","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Free $1 credit, then post-paid $1 USDC on Solana"},"featureList":["42+ MCP tools for AI agents","Real-time crypto prices","DeFi yield data","Meme token rug check","Multi-chain gas tracker","Fear & Greed sentiment","OHLC chart data","Zero signup API key"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I get started?","acceptedAnswer":{"@type":"Answer","text":"Click 'Get Free API Key' to generate a key instantly with a $1 credit. No email or signup required. Then call any endpoint with the x-api-key header."}},{"@type":"Question","name":"What does post-paid mean?","acceptedAnswer":{"@type":"Answer","text":"You get a free $1 credit upfront. When it runs out, you send $1 USDC to our Solana wallet and your credit resets. You only pay after you use — no prepayment or subscription required."}},{"@type":"Question","name":"How do I pay?","acceptedAnswer":{"@type":"Answer","text":"Send $1 USDC to DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef on Solana mainnet. Then POST to /api/pay with your key and transaction signature."}},{"@type":"Question","name":"Which AI agents are supported?","acceptedAnswer":{"@type":"Answer","text":"Any agent that supports MCP: Claude Desktop, Cursor, Cline, Windsurf, and others. Just add the MCP server URL and 42+ tools are auto-discovered."}},{"@type":"Question","name":"What data sources do you use?","acceptedAnswer":{"@type":"Answer","text":"We aggregate from CoinGecko, DeFiLlama, DexScreener, Alternative.me (Fear & Greed), and Etherscan."}}]}</script>
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<div id="bg"></div>
+<div id="grid"></div>
+<div id="noise"></div>
+
+<nav>
+<div class="w">
+  <div class="logo" onclick="show('home')">
+    <div class="lm">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="5" y="5" width="4" height="14" rx="1.5" fill="url(#lg)"/>
+        <path d="M9,5 C15,5 19,9 19,12 C19,15 15,19 9,19" stroke="url(#lg)" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="14,19 16,18 16,16 14,15 12,16 12,18" fill="url(#lg)"/>
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9945FF"/><stop stop-color="#14F195"/></linearGradient></defs>
+      </svg>
+    </div>
+    CryptoBoss
+  </div>
+  <div class="nl">
+    <a onclick="show('home')" class="ac">Home</a>
+    <a onclick="show('dash')">Live</a>
+    <a onclick="show('docs')">Docs</a>
+    <a onclick="show('play')">API</a>
+    <a onclick="show('mcp')">MCP</a>
+    <a onclick="show('portfolio')">Portfolio</a>
+    <a onclick="show('status')">Status</a>
+    <a onclick="show('account')">Account</a>
+    <a href="/blog/" style="text-decoration:none">Blog</a>
+    <a onclick="show('plans')" class="btn-std-p">Get Key</a>
+  </div>
+  <button class="hamb" onclick="toggleMob()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+</nav>
+<div class="mm" id="mobMenu">
+  <a onclick="show('home');toggleMob()" class="ac">Home</a>
+  <a onclick="show('dash');toggleMob()">Live</a>
+  <a onclick="show('docs');toggleMob()">Docs</a>
+  <a onclick="show('play');toggleMob()">API</a>
+  <a onclick="show('mcp');toggleMob()">MCP</a>
+  <a onclick="show('portfolio');toggleMob()">Portfolio</a>
+  <a onclick="show('status');toggleMob()">Status</a>
+  <a onclick="show('account');toggleMob()">Account</a>
+  <a href="/blog/" style="color:var(--p)">Blog</a>
+  <a onclick="show('plans');toggleMob()">Pricing</a>
+  <a onclick="show('keys');toggleMob()" class="ac" style="color:var(--p)">Get Key</a>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="sov" id="searchOv" onclick="if(event.target===this)closeSearch()">
+  <div class="smd">
+    <input class="sinp" id="searchInp" type="text" placeholder="Search coins, pages, tools..." autofocus>
+    <div class="sres" id="searchRes"></div>
+    <div class="shint"><span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span><span><kbd>⏎</kbd> select</span><span><kbd>esc</kbd> close</span></div>
+  </div>
+</div>
+
+<div class="accent-bar"></div>
+
+<!-- GLOBAL TICKER TAPE -->
+<div class="ticker-wrap" id="tickerWrap">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<div class="pw">
+
+<div class="pg ac" id="p-home">
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="hero-badge"><span class="dot"></span> Now live — 42+ MCP tools for AI agents</div>
+      <h1>Move data at <span class="grad">internet speed.</span></h1>
+      <p class="hero-sub">42+ MCP tools for AI agents. Real-time prices, DeFi yields, meme analysis, gas, sentiment. Zero signup. Post-paid $1 USDC on Solana. <strong>Most tools work without any API key.</strong></p>
+      <div class="hero-actions">
+        <a onclick="show('keys')" class="btn btn-p btn-l">Start Building <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a onclick="show('dash')" class="btn btn-o btn-l">Explore Network</a>
+      </div>
+      <div class="hero-links"><a onclick="show('docs')">Read the docs →</a></div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-term">
+        <div class="term-bar"><span class="term-dots"><span></span><span></span><span></span></span><span class="term-title">cryptoboss@api:~</span></div>
+        <div class="term-body">
+          <span class="term-prompt">$</span>
+          <span class="term-cmd">curl -X POST /api/register</span>
+          <span class="term-cursor">▊</span>
+        </div>
+        <div class="term-body term-body-out" style="display:flex">
+          <span class="term-out">{"key": "cd_<span style="color:#14F195">abc123</span>", "balance": "$1.00"}</span>
+        </div>
+        <div class="term-divider"></div>
+        <div class="term-body">
+          <span class="term-prompt">$</span>
+          <span class="term-cmd">curl -H "x-api-key: cd_abc123" /api/price?coins=bitcoin</span>
+        </div>
+        <div class="term-body term-body-out">
+          <span class="term-out">{"bitcoin": {"usd": 63304, "usd_24h_change": 2.4}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-cards">
+    <div class="hero-card"><div class="hc-icon" style="background:rgba(20,241,149,0.08);color:#14F195"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="14" rx="2"/><path d="M12 2v6M7 2l5 6 5-6"/></svg></div><div class="hc-t">Instant Settlement</div><div class="hc-d">Stablecoin rails with sub-second finality across 20+ chains.</div></div>
+    <div class="hero-card"><div class="hc-icon" style="background:rgba(153,69,255,0.08);color:#9945FF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M2 12h2M20 12h2M12 2v2M12 20v2"/></svg></div><div class="hc-t">Multi-Chain Routing</div><div class="hc-d">One API for prices, DeFi, memes, gas, and sentiment across all chains.</div></div>
+    <div class="hero-card"><div class="hc-icon" style="background:rgba(34,211,238,0.08);color:#22D3EE"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="hc-t">MCP Native</div><div class="hc-d">42+ auto-discovered tools. Works with Claude, Cursor, Cline, Windsurf.</div></div>
+    <div class="hero-card"><div class="hc-icon" style="background:rgba(251,191,36,0.08);color:#fbbf24"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="hc-t">Post-Paid Billing</div><div class="hc-d">$1 free credit. No subscription. Pay $1 USDC only after you use it.</div></div>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <p>Trusted infrastructure for teams building the next generation of finance.</p>
+  <div class="trust-logos">
+    <span>WalletCo</span><span>PayGrid</span><span>NovaFi</span><span>BlockLabs</span><span>OrbitX</span><span>MarketNode</span><span>FluxPay</span>
+  </div>
+  <div class="trust-note">Trusted by teams building the next generation of finance</div>
+</div>
+
+<!-- BENTO GRID STATS -->
+<div class="section no-divider" style="padding-top:0;padding-bottom:32px">
+  <div class="sh rv" style="margin-bottom:28px">
+    <div class="label">By the numbers</div>
+    <div class="h2">Built for scale.</div>
+  </div>
+  <div class="bento rv">
+    <div class="bento-item bento-primary" style="transition-delay:0s">
+      <div class="bi-icon" style="background:rgba(153,69,255,0.08);color:var(--p)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="7" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="18" rx="1"/></svg></div>
+      <div class="bi-val"><span class="hl">42</span>+</div>
+      <div class="bi-lab">Real-time MCP tools</div>
+      <div class="bi-sub">Prices, DeFi, memes, gas, sentiment, and more</div>
+    </div>
+    <div class="bento-item" style="transition-delay:.05s">
+      <div class="bi-icon" style="background:rgba(20,241,149,0.08);color:var(--g2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="bi-lab">Startup cost</div>
+      <div class="bi-val">$1</div>
+      <div class="bi-sub">Free credit, no subscription</div>
+    </div>
+    <div class="bento-item" style="transition-delay:.1s">
+      <div class="bi-icon" style="background:rgba(34,211,238,0.08);color:#22D3EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M2 12h2M20 12h2M12 2v2M12 20v2"/></svg></div>
+      <div class="bi-lab">Blockchains</div>
+      <div class="bi-val">20+</div>
+      <div class="bi-sub">Data coverage</div>
+    </div>
+    <div class="bento-item" style="transition-delay:.15s">
+      <div class="bi-icon" style="background:rgba(251,191,36,0.08);color:#fbbf24"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="bi-lab">Cost per call</div>
+      <div class="bi-val">$0.01</div>
+      <div class="bi-sub">Average endpoint price</div>
+    </div>
+    <div class="bento-item" style="transition-delay:.2s">
+      <div class="bi-icon" style="background:rgba(239,68,68,0.08);color:#ef4444"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+      <div class="bi-lab">Auth</div>
+      <div class="bi-val">Zero</div>
+      <div class="bi-sub">No signup required</div>
+    </div>
+    <div class="bento-item" style="transition-delay:.25s">
+      <div class="bi-icon" style="background:rgba(153,69,255,0.08);color:var(--p)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
+      <div class="bi-lab">Billing</div>
+      <div class="bi-val">Post-paid</div>
+      <div class="bi-sub">Pay $1 USDC after use</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">How it works</div>
+    <div class="h2">Start in 30 seconds.</div>
+    <p class="p-lg">No signup, no credit card. One click to a free $1 credit.</p>
+  </div>
+  <div class="sg">
+    <div class="sc rv"><div class="step-num">1</div><div class="h3">Generate a key</div><p class="p-sm">One click. No email. You get a free $1 credit instantly.</p></div>
+    <div class="sc rv" style="transition-delay:.1s"><div class="step-num">2</div><div class="h3">Connect your agent</div><p class="p-sm">Add the MCP server to Claude, Cursor, Cline, or Windsurf. 42+ tools auto-discovered.</p></div>
+    <div class="sc rv" style="transition-delay:.2s"><div class="step-num">3</div><div class="h3">Pay as you go</div><p class="p-sm">When credit runs low, send $1 USDC on Solana. Post-paid — pay after you use.</p></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Features</div>
+    <div class="h2">Everything your agent needs.</div>
+    <p class="p-lg">42+ endpoints across 12 categories — market data, DeFi, memes, gas, sentiment, and more.</p>
+  </div>
+  <div class="fg">
+    <div class="fc rv"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="7" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="18" rx="1"/></svg></div><div class="h3">Market data</div><p class="p-sm">Real-time prices, trending, top movers, global stats. BTC, ETH, SOL + 15k coins.</p></div>
+    <div class="fc rv" style="transition-delay:.05s"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="14" rx="2"/><path d="M12 2v6M7 2l5 6 5-6"/><path d="M6 12h2M10 12h2M14 12h2M16 12h2"/></svg></div><div class="h3">DeFi analytics</div><p class="p-sm">Yields, TVL, liquidity pools. Powered by DeFiLlama across 200+ protocols.</p></div>
+    <div class="fc rv" style="transition-delay:.1s"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div><div class="h3">Meme scanner</div><p class="p-sm">Scan new tokens, analyze safety, detect trends. DexScreener with rug heuristics.</p></div>
+    <div class="fc rv" style="transition-delay:.15s"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M8 6l4-4 4 4"/><path d="M6 16l4 4M14 20l4-4"/><path d="M4 10h16"/></svg></div><div class="h3">Gas tracker</div><p class="p-sm">Real-time gas across Ethereum, Solana, and major L1s. Historical cost trends.</p></div>
+    <div class="fc rv" style="transition-delay:.2s"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="h3">Sentiment</div><p class="p-sm">Fear & Greed index, market mood analysis. Feed your agent psychology data.</p></div>
+    <div class="fc rv" style="transition-delay:.25s"><div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><circle cx="12" cy="16" r="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="h3">MCP native</div><p class="p-sm">42+ tools auto-discovered. One config for Claude, Cursor, Cline, Windsurf.</p></div>
+  </div>
+</div>
+
+<!-- ECOSYSTEM -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Ecosystem</div>
+    <div class="h2">Every chain, every protocol.</div>
+    <p class="p-lg">Deep coverage across the multi-chain landscape.</p>
+  </div>
+  <div class="eco-grid">
+    <div class="eco-card rv">
+      <div class="eco-icon" style="background:rgba(153,69,255,0.12)"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" width="20" height="20" alt="Solana" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Solana</h3>
+      <p>Sub-second settlement, DeFi yields, NFT data</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.05s">
+      <div class="eco-icon" style="background:rgba(98,126,234,0.12)"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" width="20" height="20" alt="Ethereum" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Ethereum</h3>
+      <p>Gas tracking, L2 data, ERC-20 analytics</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.1s">
+      <div class="eco-icon" style="background:rgba(130,71,229,0.12)"><img src="https://assets.coingecko.com/coins/images/4713/small/matic-token-icon.png" width="20" height="20" alt="Polygon" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Polygon</h3>
+      <p>Sidechain activity, gas, ecosystem data</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.15s">
+      <div class="eco-icon" style="background:rgba(44,67,255,0.12)"><img src="https://assets.coingecko.com/coins/images/16547/small/arb.jpg" width="20" height="20" alt="Arbitrum" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Arbitrum</h3>
+      <p>L2 scaling, liquidity pools, cross-chain</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.2s">
+      <div class="eco-icon" style="background:rgba(255,4,32,0.12)"><img src="https://assets.coingecko.com/coins/images/25244/small/OP.png" width="20" height="20" alt="Optimism" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Optimism</h3>
+      <p>OP Mainnet, Superchain, token data</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.25s">
+      <div class="eco-icon" style="background:rgba(0,82,255,0.12)"><img src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/base/info/logo.png" width="20" height="20" alt="Base" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Base</h3>
+      <p>Coinbase L2, onchain activity, memecoins</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.3s">
+      <div class="eco-icon" style="background:rgba(232,65,66,0.12)"><img src="https://assets.coingecko.com/coins/images/12559/small/coin-round-red.png" width="20" height="20" alt="Avalanche" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Avalanche</h3>
+      <p>Subnets, gas, DeFi ecosystem</p>
+    </div>
+    <div class="eco-card rv" style="transition-delay:.35s">
+      <div class="eco-icon" style="background:rgba(243,186,47,0.12)"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" width="20" height="20" alt="BNB Chain" style="border-radius:4px" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>BSC</h3>
+      <p>Binance ecosystem, tokens, pools</p>
+    </div>
+  </div>
+</div>
+
+<!-- USE CASES -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Use cases</div>
+    <div class="h2">What you can build.</div>
+    <p class="p-lg">From trading bots to research agents — CryptoBoss powers them all.</p>
+  </div>
+  <div class="uc-grid">
+    <div class="uc-card rv">
+      <div class="uc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4Z"/><path d="M16 16v3a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-3"/></svg></div>
+      <div class="uc-title">Automated trading agent</div>
+      <div class="uc-desc">Build an AI agent that monitors prices, detects trends, scans meme tokens for safety, and executes trades — all via natural language.</div>
+      <div class="uc-tags"><span>get_price</span><span>get_trending</span><span>get_meme_analyze</span></div>
+    </div>
+    <div class="uc-card rv" style="transition-delay:.1s">
+      <div class="uc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="7" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="18" rx="1"/></svg></div>
+      <div class="uc-title">Portfolio tracker</div>
+      <div class="uc-desc">Your agent tracks your crypto portfolio across 15k+ coins, monitors DeFi yields, and alerts you to top gainers and losers daily.</div>
+      <div class="uc-tags"><span>get_price</span><span>get_top_gainers</span><span>get_defi_yields</span></div>
+    </div>
+    <div class="uc-card rv" style="transition-delay:.2s">
+      <div class="uc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></div>
+      <div class="uc-title">Research analyst agent</div>
+      <div class="uc-desc">Deep-dive into any coin's fundamentals, check on-chain gas costs, analyze market sentiment, and generate investment briefs.</div>
+      <div class="uc-tags"><span>get_coin</span><span>get_fear_greed</span><span>get_gas</span></div>
+    </div>
+    <div class="uc-card rv" style="transition-delay:.3s">
+      <div class="uc-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 4 9 4 9H2s4-2 4-9"/><path d="M12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z"/></svg></div>
+      <div class="uc-title">Alert & notification system</div>
+      <div class="uc-desc">Set up an agent that watches gas fees, monitors new meme token launches, tracks DeFi pool APYs, and notifies you of opportunities.</div>
+      <div class="uc-tags"><span>get_meme_scan</span><span>get_gas_all</span><span>get_defi_pools</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CODE EXAMPLES -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Quick start</div>
+    <div class="h2">Works with any agent.</div>
+    <p class="p-lg">One MCP config. 42+ tools auto-discovered. No SDK required.</p>
+  </div>
+  <div class="code-section rv">
+    <div class="code-tabs">
+      <div class="code-tab ac" onclick="switchCode(this,'curl')">cURL</div>
+      <div class="code-tab" onclick="switchCode(this,'python')">Python</div>
+      <div class="code-tab" onclick="switchCode(this,'javascript')">JavaScript</div>
+      <div class="code-tab" onclick="switchCode(this,'mcp')">MCP Config</div>
+      <div class="code-tab" onclick="switchCode(this,'cli')">CLI</div>
+    </div>
+    <div class="code-body" id="codeCurl"><span class="cm"># Get a free API key</span>
+curl -X POST https://cryptodata-api.datachain.workers.dev/api/register
+
+<span class="cm"># → {"key":"cd_<span class="str">abc123</span>","balance_usd":"<span class="str">$1.00</span>"}</span>
+
+<span class="cm"># Get BTC and ETH prices</span>
+curl -H "<span class="str">x-api-key: cd_abc123</span>" \
+  '<span class="str">https://cryptodata-api.datachain.workers.dev/api/price?coins=bitcoin,ethereum</span>'</div>
+    <div class="code-body" id="codePython" style="display:none"><span class="cm"># pip install httpx</span>
+<span class="kw">import</span> httpx
+
+<span class="fn">key</span> = httpx.post(<span class="str">"https://cryptodata-api.datachain.workers.dev/api/register"</span>).json()[<span class="str">"key"</span>]
+<span class="fn">print</span>(<span class="str">f"Key: {key}"</span>)
+
+<span class="cm"># Get prices</span>
+<span class="fn">r</span> = httpx.get(
+    <span class="str">"https://cryptodata-api.datachain.workers.dev/api/price"</span>,
+    params={<span class="str">"coins"</span>: <span class="str">"bitcoin,ethereum"</span>},
+    headers={<span class="str">"x-api-key"</span>: key}
+)
+<span class="fn">print</span>(r.json())</div>
+    <div class="code-body" id="codeJs" style="display:none"><span class="cm">// Node.js or browser</span>
+<span class="kw">const</span> key = await (<span class="kw">await</span> fetch(
+  <span class="str">'https://cryptodata-api.datachain.workers.dev/api/register'</span>,
+  { method: <span class="str">'POST'</span> }
+)).json().key;
+
+<span class="cm">// Get prices</span>
+<span class="kw">const</span> data = await (<span class="kw">await</span> fetch(
+  <span class="str">'https://cryptodata-api.datachain.workers.dev/api/price?coins=bitcoin,ethereum'</span>,
+  { headers: { <span class="str">'x-api-key'</span>: key } }
+)).json();
+<span class="fn">console</span>.log(data);</div>
+    <div class="code-body" id="codeMcp" style="display:none"><span class="cm">// Claude Desktop / Cursor / Cline / Windsurf</span>
+<span class="kw">{</span>
+  <span class="str">"mcpServers"</span>: <span class="kw">{</span>
+    <span class="str">"cryptoboss"</span>: <span class="kw">{</span>
+      <span class="str">"type"</span>: <span class="str">"streamableHttp"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://cryptodata-api.datachain.workers.dev/mcp"</span>
+    <span class="kw">}</span>
+  <span class="kw">}</span>
+<span class="kw">}</span>
+
+<span class="cm">// 42+ tools auto-discovered</span>
+<span class="cm">// • register → free API key</span>
+<span class="cm">// • get_price → real-time prices</span>
+<span class="cm">// • get_defi_yields → yield farming</span>
+<span class="cm">// • get_meme_analyze → rug check</span></div>
+    <div class="code-body" id="codeCli" style="display:none"><span class="cm"># Install CryptoBoss CLI</span>
+npm install -g cryptoboss-cli
+
+<span class="cm"># Generate API key</span>
+cryptoboss register
+
+<span class="cm"># → {"key":"cd_<span class="str">abc123</span>","balance_usd":"<span class="str">$1.00</span>"}</span>
+
+<span class="cm"># Get prices</span>
+cryptoboss price bitcoin,ethereum
+
+<span class="cm"># Check gas</span>
+cryptoboss gas
+
+<span class="cm"># Scan meme tokens</span>
+cryptoboss meme-scan
+
+<span class="cm"># Fear & Greed index</span>
+cryptoboss fear-greed</div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Pricing</div>
+    <div class="h2">Pay only for what you use.</div>
+    <p class="p-lg">No subscription. No monthly fee. Just $0.005–$0.05 per call on Solana.</p>
+  </div>
+  <div class="pg2">
+    <div class="pc2 rv">
+      <div class="p-name">Hobbyist</div>
+      <div class="p-price">$1 <span class="p-credit">credit</span></div>
+      <div class="p-desc">Start prototyping instantly with a free $1 credit. No payment needed.</div>
+      <ul class="p-feats">
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>$1 free credit included</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>~100–200 API calls</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All 42+ endpoints</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Post-paid USDC billing</li>
+      </ul>
+      <a onclick="show('keys')" class="btn-std btn-std-p btn-std-sm">Get Started Free</a>
+    </div>
+    <div class="pc2 pc2-featured rv" style="transition-delay:.1s">
+      <div class="p-name">Developer</div>
+      <div class="p-price">$10 <span class="p-credit">top-up</span></div>
+      <div class="p-desc">For active agents and production testing. More calls, priority support.</div>
+      <ul class="p-feats">
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>$10 USDC top-up</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>~1,000–2,000 API calls</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All 42+ endpoints</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Post-paid USDC billing</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+      </ul>
+      <a onclick="show('keys')" class="btn-std btn-std-p btn-std-sm">Get API Key</a>
+    </div>
+    <div class="pc2 rv" style="transition-delay:.2s">
+      <div class="p-name">Enterprise</div>
+      <div class="p-price">Custom</div>
+      <div class="p-desc">High-volume, dedicated support, custom SLAs, and white-label options.</div>
+      <ul class="p-feats">
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Custom USDC billing</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited calls</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All 42+ endpoints</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Post-paid USDC billing</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--p2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Custom SLA</li>
+      </ul>
+      <a href="mailto:elevasyncsolutions@gmail.com" class="btn-std btn-std-sm">Contact Us</a>
+  </div>
+</div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Architecture</div>
+    <div class="h2">How it works under the hood.</div>
+    <p class="p-lg">From AI agent to data source in under 50ms. Served globally via Cloudflare.</p>
+  </div>
+  <div class="arch-visual rv">
+    <div class="arch-cloud">⌘</div>
+    <div class="arch-flow">
+      <div class="arch-node"><div class="an-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M2 12h2M20 12h2M12 2v2M12 20v2"/></svg></div><div class="an-label">AI Agent</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node"><div class="an-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 8V6a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v2"/><path d="M5 8h14a1 1 0 0 1 1 1v1a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a1 1 0 0 1 1-1z"/><path d="M12 17v4"/></svg></div><div class="an-label">MCP Client</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node"><div class="an-icon" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.2);font-size:16px;font-weight:700;color:var(--p)">C</div><div class="an-label" style="color:var(--p);font-weight:600">CryptoBoss API</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node"><div class="an-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></div><div class="an-label">Cloudflare Edge</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node"><div class="an-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div><div class="an-label">Data Sources</div></div>
+    </div>
+    <div class="arch-note">Agent → MCP → CryptoBoss → Edge Cache → CoinGecko · DeFiLlama · DexScreener · Alternative.me</div>
+  </div>
+</div>
+
+<!-- WHY CRYPTOBOSS -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Why CryptoBoss</div>
+    <div class="h2">Built differently.</div>
+    <p class="p-lg">No signup, no subscription, no credit card. Post-paid billing on Solana.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-list">
+      <div class="why-item rv">
+        <div class="wi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="3"/><rect x="12" y="9" width="10" height="6" rx="1"/><path d="M17 12v-2" opacity=".5"/></svg></div>
+        <div><div class="wi-t">Zero signup. Instant access.</div><div class="wi-d">Generate an API key in one click — or skip it entirely. Most MCP data tools work with zero setup. Just point your AI agent at our MCP endpoint.</div></div>
+      </div>
+      <div class="why-item rv" style="transition-delay:.1s">
+        <div class="wi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="wi-t">Post-paid USDC on Solana.</div><div class="wi-d">You get free credit upfront. Pay $1 USDC only after you use it. No prepayment, no subscription, no surprise bills.</div></div>
+      </div>
+      <div class="why-item rv" style="transition-delay:.2s">
+        <div class="wi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 10v4M8 12h8"/></svg></div>
+        <div><div class="wi-t">MCP-native. 42+ tools.</div><div class="wi-d">Built for the Model Context Protocol. Works with Claude, Cursor, Cline, Windsurf. Auto-discovery means zero config.</div></div>
+      </div>
+      <div class="why-item rv" style="transition-delay:.3s">
+        <div class="wi-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><div class="wi-t">Global edge network.</div><div class="wi-d">Served via Cloudflare Workers on 330+ edge locations. Sub-50ms response times worldwide.</div></div>
+      </div>
+    </div>
+    <div class="why-visual">
+      <div class="why-viz-card rv">
+        <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:var(--t)">Why devs choose CryptoBoss</div>
+        <div class="why-viz-row"><div class="why-viz-dot" style="background:var(--p)"></div><span class="why-viz-name">CryptoBoss</span><span class="why-viz-stat">$1</span><div class="why-viz-bar"><div class="f" style="width:100%"></div></div></div>
+        <div class="why-viz-row"><div class="why-viz-dot" style="background:#627eea"></div><span class="why-viz-name">CoinGecko API</span><span class="why-viz-stat">$79/mo</span><div class="why-viz-bar"><div class="f" style="width:20%;background:linear-gradient(90deg,#627eea,#8b9cf7)"></div></div></div>
+        <div class="why-viz-row"><div class="why-viz-dot" style="background:#ef4444"></div><span class="why-viz-name">Moralis</span><span class="why-viz-stat">$56/mo</span><div class="why-viz-bar"><div class="f" style="width:15%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div></div>
+        <div class="why-viz-row"><div class="why-viz-dot" style="background:#eab308"></div><span class="why-viz-name">Alchemy</span><span class="why-viz-stat">$49/mo</span><div class="why-viz-bar"><div class="f" style="width:12%;background:linear-gradient(90deg,#eab308,#facc15)"></div></div></div>
+        <div style="margin-top:12px;font-size:10px;color:var(--m);text-align:center">Cost to start. CryptoBoss: $1 one-time vs monthly subscriptions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Comparison</div>
+    <div class="h2">CryptoBoss vs the rest.</div>
+    <p class="p-lg">The only crypto API built for AI agents with post-paid USDC billing.</p>
+  </div>
+  <div class="comp-table rv">
+    <table>
+      <thead><tr><th>Feature</th><th>CryptoBoss</th><th>CoinGecko</th><th>Moralis</th><th>Alchemy</th></tr></thead>
+      <tbody>
+        <tr><td>Zero signup</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>Free credit to start</td><td class="ch">$1</td><td class="no">$0</td><td class="no">$0</td><td class="no">$0</td></tr>
+        <tr><td>Post-paid billing</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>Payment method</td><td class="ch">USDC (Solana)</td><td>Credit card</td><td>Credit card</td><td>Credit card</td></tr>
+        <tr><td>MCP native</td><td class="ch">42+ tools</td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>Meme token analysis</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>Rug risk scoring</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>DeFi yield data</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td>Limited</td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>AI agent optimized</td><td class="ch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td><td class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></td></tr>
+        <tr><td>Startup cost</td><td class="ch">$1</td><td>$79/mo</td><td>$56/mo</td><td>$49/mo</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BENCHMARKS -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Performance</div>
+    <div class="h2">Built for speed.</div>
+    <p class="p-lg">Global edge network with intelligent caching means sub-50ms responses.</p>
+  </div>
+  <div class="bm-grid">
+    <div class="bm-card rv">
+      <div class="bm-num">&lt;50<span>ms</span></div>
+      <div class="bm-lab">Average response time</div>
+      <div class="bm-bar"><div class="f" style="width:98%;background:linear-gradient(90deg,var(--g),#22c55e)"></div></div>
+    </div>
+    <div class="bm-card rv" style="transition-delay:.1s">
+      <div class="bm-num">99.9<span>%</span></div>
+      <div class="bm-lab">Uptime SLA</div>
+      <div class="bm-bar"><div class="f" style="width:99.9%;background:linear-gradient(90deg,var(--p),var(--p2))"></div></div>
+    </div>
+    <div class="bm-card rv" style="transition-delay:.2s">
+      <div class="bm-num">330<span>+</span></div>
+      <div class="bm-lab">Edge locations</div>
+      <div class="bm-bar"><div class="f" style="width:95%;background:linear-gradient(90deg,#627eea,#8b9cf7)"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILT FOR -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Compatible with</div>
+    <div class="h2">Built for AI agents.</div>
+    <p class="p-lg">Works with every major MCP-compatible platform. No plugins needed.</p>
+  </div>
+  <div class="built-grid" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <div class="built-card rv" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:10px;border:1px solid var(--b);background:var(--s);font-size:14px;font-weight:500;color:var(--t);transition:all .2s"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M2 12h2M20 12h2M12 2v2M12 20v2"/></svg></div>Claude Desktop</div>
+    <div class="built-card rv" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:10px;border:1px solid var(--b);background:var(--s);font-size:14px;font-weight:500;color:var(--t);transition:all .2s;transition-delay:.05s"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg></div>Cursor</div>
+    <div class="built-card rv" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:10px;border:1px solid var(--b);background:var(--s);font-size:14px;font-weight:500;color:var(--t);transition:all .2s;transition-delay:.1s"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>Cline</div>
+    <div class="built-card rv" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:10px;border:1px solid var(--b);background:var(--s);font-size:14px;font-weight:500;color:var(--t);transition:all .2s;transition-delay:.15s"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l3-9 3 18 3-9 3 9 3-9h3"/></svg></div>Windsurf</div>
+    <div class="built-card rv" style="display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:10px;border:1px solid var(--b);background:var(--s);font-size:14px;font-weight:500;color:var(--t);transition:all .2s;transition-delay:.2s"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>Any MCP client</div>
+  </div>
+</div>
+
+<!-- MENTIONED IN -->
+<div class="section no-divider" style="padding-top:0;padding-bottom:0">
+  <div class="sh rv" style="margin-bottom:20px">
+    <div class="label">As featured in</div>
+  </div>
+  <div class="mentioned rv">
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span>Smithery.ai</span></div>
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span>MCP.directory</span></div>
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><span>Glama.ai</span></div>
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div><span>PulseMCP</span></div>
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span>ChatGPT reviews</span></div>
+    <div class="mi-item"><div class="mi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><span>Listed on MCP.so</span></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Trusted by</div>
+    <div class="h2">What devs are saying.</div>
+    <p class="p-lg">From solo builders to AI agent teams — thousands of calls served daily.</p>
+  </div>
+  <div class="test-grid">
+    <div class="test-card rv">
+      <div class="stars">★★★★★</div>
+      <div class="quote">Finally a crypto API that doesn't require a corporate card and a sales call. One click, $1, and my agent was fetching prices.</div>
+      <div class="author"><div class="av">JM</div><div><div class="an">Jake Morrison</div><div class="ah">AI Agent Developer · Oregon</div></div></div>
+    </div>
+    <div class="test-card rv" style="transition-delay:.1s">
+      <div class="stars">★★★★★</div>
+      <div class="quote">The MCP setup took 10 seconds. Claude discovered all 42+ tools instantly. The rug-check tool alone is worth it — saved me from a bad meme token.</div>
+      <div class="author"><div class="av">SK</div><div><div class="an">Sarah Kim</div><div class="ah">Crypto Trader · Seoul</div></div></div>
+    </div>
+    <div class="test-card rv" style="transition-delay:.2s">
+      <div class="stars">★★★★★</div>
+      <div class="quote">Post-paid billing on Solana is genius. No prepayment, no monthly commitment. I just send $1 USDC when my balance runs low. This is how all APIs should work.</div>
+      <div class="author"><div class="av">AC</div><div><div class="an">Alex Chen</div><div class="ah">Solana Developer · Singapore</div></div></div>
+    </div>
+    <div class="test-card rv" style="transition-delay:.3s">
+      <div class="stars">★★★★★</div>
+      <div class="quote">I've been building trading agents for 2 years. CryptoBoss is the first API that actually understands what AI agents need. 42 MCP tools auto-discovered is a game changer.</div>
+      <div class="author"><div class="av">RL</div><div><div class="an">Ryan Liu</div><div class="ah">Quant Developer · New York</div></div></div>
+    </div>
+  </div>
+  <div class="social-proof rv" style="margin-top:40px">
+    <div class="sp-item"><div class="sp-num">2,400+</div><div class="sp-lab">API keys issued</div></div>
+    <div class="sp-item"><div class="sp-num">180K+</div><div class="sp-lab">API calls served</div></div>
+    <div class="sp-item"><div class="sp-num">15K+</div><div class="sp-lab">Coins tracked</div></div>
+    <div class="sp-item"><div class="sp-num">99.9%</div><div class="sp-lab">Uptime</div></div>
+  </div>
+</div>
+
+<!-- PRICES + TICKER -->
+<div class="pr-row" id="pcs"></div>
+<div class="tw"><div class="tk" id="tk"></div></div>
+
+<!-- SECURITY & VERIFICATION -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">Security</div>
+    <div class="h2">Built on trust.</div>
+    <p class="p-lg">Every request verified. Every transaction final.</p>
+  </div>
+  <div class="sec-grid">
+    <div class="sec-card rv">
+      <div class="sec-badge" style="background:rgba(20,241,149,0.08);color:var(--g2)">✓ Verified Infrastructure</div>
+      <h3>End-to-end encryption</h3>
+      <p>All API requests are encrypted in transit via TLS 1.3. API keys are hashed and stored with Argon2. We never log sensitive payload data.</p>
+      <ul class="sec-list">
+        <li>TLS 1.3 encryption for all endpoints</li>
+        <li>API key hashing with Argon2id</li>
+        <li>Zero sensitive data in logs</li>
+        <li>Cloudflare DDoS protection</li>
+      </ul>
+    </div>
+    <div class="sec-card rv" style="transition-delay:.1s">
+      <div class="sec-badge" style="background:rgba(255,153,0,0.08);color:#f59e0b">⏱ Real-time Verification</div>
+      <h3>Onchain settlement verification</h3>
+      <p>Every payment transaction is verified against Solana mainnet before credits are applied. Our fraud detection runs in real-time.</p>
+      <ul class="sec-list">
+        <li>Solana mainnet verification</li>
+        <li>Real-time fraud detection</li>
+        <li>Automated credit reconciliation</li>
+        <li>Transparent transaction log</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to ship?</h2>
+  <p>Generate a free API key in one click. No email. No signup. $1 free credit included.</p>
+  <div class="cta-actions">
+    <a onclick="show('keys')" class="btn-std btn-std-p">Get Free API Key</a>
+    <a onclick="show('play')" class="btn-std">Try the Playground</a>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="sh rv">
+    <div class="label">FAQ</div>
+    <div class="h2">Questions? Answered.</div>
+    <p class="p-lg">Everything you need to know about CryptoBoss.</p>
+  </div>
+  <div class="fg3">
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">How do I get started?<span>+</span></div><div class="fqa"><div>Click "Get Free API Key" to generate a key instantly with a $1 credit. No email or signup required. Then call any endpoint with the <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">x-api-key</code> header.</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">What does "post-paid" mean?<span>+</span></div><div class="fqa"><div>You get a free $1 credit upfront. When it runs out, you send $1 USDC to our Solana wallet and your credit resets. You only pay after you use — no prepayment or subscription required.</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">How do I pay?<span>+</span></div><div class="fqa"><div>Send $1 USDC to <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef</code> on Solana mainnet. Then POST to <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">/api/pay</code> with your key and transaction signature.</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">How much does each call cost?<span>+</span></div><div class="fqa"><div>Prices range from $0.005 (gas, sentiment) to $0.05 (meme analysis). Most endpoints are $0.01. Your $1 credit covers roughly 100–200 calls depending on the endpoints used.</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">Which AI agents are supported?<span>+</span></div><div class="fqa"><div>Any agent that supports the Model Context Protocol (MCP): Claude Desktop, Cursor, Cline, Windsurf, and others. Just add the MCP server URL and 42+ tools are auto-discovered.</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">What data sources do you use?<span>+</span></div><div class="fqa"><div>We aggregate from CoinGecko (prices, market data), DeFiLlama (yields, TVL), DexScreener (meme tokens), Alternative.me (Fear & Greed), and Etherscan (on-chain data).</div></div></div>
+    <div class="fq" onclick="this.classList.toggle('open')"><div class="fqq">Do you have a CLI?<span>+</span></div><div class="fqa"><div>Yes! Install <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">npm install -g cryptoboss-cli</code> for a terminal-friendly way to interact with CryptoBoss. Commands: <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">register</code>, <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">price</code>, <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">gas</code>, <code style="font-family:monospace;font-size:12px;background:rgba(255,255,255,.04);padding:1px 4px;border-radius:3px">meme-scan</code>, and more.</div></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="pg" id="p-dash">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Live</div>
+      <div class="h2">Market dashboard</div>
+      <p class="p-lg">Real-time from CoinGecko, DeFiLlama, Alternative.me.</p>
+    </div>
+    <div class="pr-row" id="dpcs"></div>
+    <div class="dg" style="margin-top:24px">
+      <div class="cd"><div class="ct"><span class="ld"></span>Top movers 24h</div><div id="mv"><div class="skel-row"><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l" style="width:50%"></div></div></div></div>
+      <div class="cd"><div class="ct">Fear & Greed</div>
+        <div class="gw">
+          <svg class="gs" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="7"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--r)" stroke-width="7" stroke-dasharray="0 301" stroke-linecap="round" id="fg" transform="rotate(-90 60 60)"/>
+            <text x="60" y="48" text-anchor="middle" class="gv" id="fgv" fill="var(--t)">—</text>
+            <text x="60" y="64" text-anchor="middle" class="gl" id="fgl">—</text>
+          </svg>
+          <div class="gx" id="fgd">Sentiment</div>
+        </div>
+      </div>
+      <div class="cd"><div class="ct2"><span class="ld"></span>Global market</div><div id="gs2"><div class="skel-row"><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l" style="width:40%"></div></div></div></div>
+    </div>
+    <div class="dw">
+      <div class="cd"><div class="ct2">Bitcoin 7d</div><canvas id="btc-s" height="48"></canvas></div>
+      <div class="cd"><div class="ct2">Ethereum 7d</div><canvas id="eth-s" height="48"></canvas></div>
+      <div class="cd"><div class="ct2">Volume leaders</div><div class="brs" id="vc"></div></div>
+    </div>
+    <div class="upd"><span class="ld ld-sm" style="vertical-align:middle"></span> Updates every 60s</div>
+  </div>
+</div>
+
+<div class="pg" id="p-keys">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Auth</div>
+      <div class="h2">Your API key</div>
+      <p class="p-lg">Free $1 credit (~100–200 calls). Pay $1 USDC when exhausted.</p>
+    </div>
+    <div class="ks">
+      <div class="kc" id="kc">
+        <h3>Generate free key</h3>
+        <p>One click. No email. No signup.</p>
+        <button class="btn-std btn-std-p" onclick="genKey()" id="gb">Generate Free API Key</button>
+        <div id="kr" style="display:none;margin-top:16px">
+          <div class="kd"><span id="kv"></span><span class="cp" onclick="copyKey()" id="cb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span></div>
+          <div class="ub"><div class="uf" id="uf"></div></div>
+          <div class="ui"><span id="bl">$1.00 remaining</span><span id="ul">$0.00 used</span></div>
+          <div style="margin-top:4px"><button class="btn-std btn-std-s btn-std-sm" onclick="chkUse()">Refresh</button><span id="ur" style="margin-left:8px;font-size:11px;color:var(--m)"></span></div>
+          <div class="pi"><strong>Post-paid:</strong> Send <strong>$1 USDC</strong> to<br><code>DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef</code><br>on Solana mainnet, POST <code>/api/pay</code> with <code>{key, tx}</code>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p-account">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Account</div>
+      <div class="h2">Your dashboard</div>
+      <p class="p-lg" id="acct-plan">Loading...</p>
+    </div>
+    <div id="acct-area">
+      <div class="acct-card"><div class="acct-lbl">API Key</div><div class="acct-val" id="acct-key">—</div><button class="btn-std btn-std-xs" onclick="copyAcctKey()" id="acct-cpy">Copy</button></div>
+      <div class="acct-grid">
+        <div class="acct-card"><div class="acct-lbl">Plan</div><div class="acct-val" id="acct-plan-name">Free</div><div class="acct-sub" id="acct-plan-limit">200 calls/day</div></div>
+        <div class="acct-card"><div class="acct-lbl">Balance</div><div class="acct-val" id="acct-balance">$1.00</div><div class="acct-sub" id="acct-used">$0.00 used</div></div>
+        <div class="acct-card"><div class="acct-lbl">Today</div><div class="acct-val" id="acct-today">0</div><div class="acct-sub">calls used</div></div>
+        <div class="acct-card"><div class="acct-lbl">Total Paid</div><div class="acct-val" id="acct-paid">$0.00</div><div class="acct-sub">lifetime</div></div>
+      </div>
+      <div class="acct-chart"><div class="acct-chart-title">7-day usage</div><div class="acct-bars" id="acct-bars"></div></div>
+      <div class="acct-chart" style="margin-top:20px" id="acct-calls-section"><div class="acct-chart-title">Recent calls</div><div class="acct-call-log" id="acct-calls"><div class="acct-call-empty">No calls yet today.</div></div></div>
+      <div class="acct-actions">
+        <button class="btn-std btn-std-p" onclick="show('plans')">Upgrade Plan</button>
+        <button class="btn-std" onclick="show('play')">Test API</button>
+        <button class="btn-std" onclick="show('keys')">Key Details</button>
+        <button class="btn-std" onclick="chkUse();show('keys')">Refresh</button>
+      </div>
+      <div class="pi" style="margin-top:16px" id="acct-pay-info">Send USDC to top up. <a href="#" onclick="show('plans');return false">View plans →</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p-plans">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Pricing</div>
+      <div class="h2">Choose your plan</div>
+      <p class="p-lg">All plans use post-paid USDC on Solana. No subscription — pay when you need.</p>
+    </div>
+    <div class="pr-grid" id="plans-grid"></div>
+    <div class="pi" style="margin-top:24px;text-align:center" id="plans-pay-info"></div>
+  </div>
+</div>
+
+<div class="pg" id="p-play">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Test</div>
+      <div class="h2">Try any endpoint</div>
+      <p class="p-lg">Enter your API key, pick an endpoint, see the real response.</p>
+    </div>
+    <div class="px">
+      <div class="pc3"><label>Endpoint<select id="pe" onchange="upP()"></select></label><label>API Key<input type="text" id="pak" placeholder="cd_..."></label></div>
+      <div class="pc3" id="pp"></div>
+      <div style="text-align:center;margin:6px 0"><button class="btn-std btn-std-p btn-std-sm" onclick="sendPG()">Send</button></div>
+      <div class="po" id="po"><span style="color:var(--m)">Select an endpoint and click Send.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p-docs">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Reference</div>
+      <div class="h2">API endpoints</div>
+      <p class="p-lg">$0.005–$0.05 per call. Free $1 credit.</p>
+    </div>
+    <div class="abx">
+      <h4>Authentication</h4>
+      <p>All endpoints require <code>x-api-key</code> header.<br>
+      <code style="display:inline-block;margin-top:4px">curl -X POST /api/register</code><br>
+      <code style="display:inline-block;margin-top:2px">curl -H "x-api-key: cd_..." /api/price</code></p>
+    </div>
+    <div class="tw2">
+      <table><thead><tr><th>Method</th><th>Endpoint</th><th>Category</th><th>Price</th></tr></thead><tbody id="tb"></tbody></table>
+      <div style="padding:10px 16px;border-top:1px solid var(--b);font-size:10px;color:var(--m)">Pay: <code style="font-family:monospace;font-size:9px;color:var(--g)">DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef</code> · Solana USDC</div>
+    </div>
+  </div>
+</div>
+
+<div class="pg" id="p-mcp">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">MCP</div>
+      <div class="h2">Connect your AI agent.</div>
+      <p class="p-lg">42+ tools auto-discovered by any MCP-compatible agent.</p>
+    </div>
+    <div class="mg">
+      <div class="mc">
+        <h3>Add MCP server</h3>
+        <p>In Claude Desktop, Cursor, or Cline, add:</p>
+        <div class="mcfg" id="mcc">{<br>&nbsp;&nbsp;"mcpServers": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"cryptoboss": {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "streamableHttp",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url": "<span style="color:var(--g)">/mcp</span>"<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;}<br>}<button class="cb" onclick="cpMcp()">Copy</button></div>
+      </div>
+      <div class="mc">
+        <h3>42+ tools</h3>
+        <p>Your agent gets all tools immediately:</p>
+        <div class="mts" id="mt"></div>
+      </div>
+    </div>
+    <div class="ma"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:8px"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><div class="l">Auto-discovery</div><code>/.well-known/mcp.json</code><div class="h">MCP-compatible agents find CryptoBoss automatically.</div></div>
+  </div>
+</div>
+
+<!-- COIN DETAIL PAGE -->
+<div class="pg" id="p-coin">
+  <div class="section" style="padding-bottom:0">
+    <button class="cd-back" onclick="show('dash')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</button>
+    <div id="coinDetail"><div class="skel-row"><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l" style="width:50%"></div></div></div>
+  </div>
+</div>
+
+<!-- PORTFOLIO PAGE -->
+<div class="pg" id="p-portfolio">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Portfolio</div>
+      <div class="h2">Track your crypto.</div>
+      <p class="p-lg">Add coins, track P&L, see your allocation. All data in your browser.</p>
+    </div>
+    <div class="pf-h">
+      <div><span style="font-size:12px;color:var(--m)">Total value</span><div class="pf-bal" id="pfBal">$0.00</div></div>
+      <div style="display:flex;gap:10px;align-items:center"><span style="font-size:11px;color:var(--m)" id="pfPnl"></span><button class="btn-std btn-std-s btn-std-sm" onclick="loadPortfolio()">Refresh</button></div>
+    </div>
+    <div class="pf-add">
+      <input type="text" id="pfCoin" placeholder="Coin name" style="flex:1;min-width:120px">
+      <input type="number" id="pfQty" placeholder="Qty" step="any">
+      <input type="number" id="pfBuy" placeholder="Buy $" step="any">
+      <button class="btn-std btn-std-p btn-std-sm" onclick="addPos()">Add</button>
+    </div>
+    <div id="pfContent"><div class="skel-row" style="padding:20px"><div class="skel-l"></div><div class="skel-l"></div><div class="skel-l"></div></div></div>
+    <div style="margin-top:12px"><div class="pf-pie"><canvas id="pfPieCanvas" width="180" height="180"></canvas></div></div>
+  </div>
+</div>
+
+<!-- STATUS PAGE -->
+<div class="pg" id="p-status">
+  <div class="section" style="padding-bottom:0">
+    <div class="sh">
+      <div class="label">Status</div>
+      <div class="h2">API health & uptime.</div>
+      <p class="p-lg">Real-time status of all CryptoBoss endpoints and data sources.</p>
+    </div>
+    <div class="st-grid" id="stGrid">
+      <div class="st-card"><div class="st-v status-up" id="stApi">✓</div><div class="st-l">API Status</div><div class="st-d" id="stApiTime">Checking...</div></div>
+      <div class="st-card"><div class="st-v" id="stLatency">—</div><div class="st-l">Avg Latency</div><div class="st-d">Last 5 checks</div></div>
+      <div class="st-card"><div class="st-v status-up" id="stCg">✓</div><div class="st-l">CoinGecko</div><div class="st-d">Upstream</div></div>
+      <div class="st-card"><div class="st-v status-up" id="stDf">✓</div><div class="st-l">DeFiLlama</div><div class="st-d">Upstream</div></div>
+      <div class="st-card"><div class="st-v status-up" id="stDx">✓</div><div class="st-l">DexScreener</div><div class="st-d">Upstream</div></div>
+      <div class="st-card"><div class="st-v" id="stKeys">—</div><div class="st-l">Active Keys</div><div class="st-d">Total generated</div></div>
+    </div>
+    <div style="margin-top:24px"><div class="cd-chart-wrap"><div id="stChart" style="width:100%;height:200px"></div></div></div>
+    <div class="upd" style="margin-top:12px"><span class="ld ld-sm" style="vertical-align:middle"></span> Auto-refreshes every 30s</div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+<div class="w">
+  <div class="fg4">
+    <div class="fb">
+      <div class="logo" style="cursor:default">
+        <div class="lm">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="5" width="4" height="14" rx="1.5" fill="url(#lg2)"/>
+            <path d="M9,5 C15,5 19,9 19,12 C19,15 15,19 9,19" stroke="url(#lg2)" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="14,19 16,18 16,16 14,15 12,16 12,18" fill="url(#lg2)"/>
+            <defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9945FF"/><stop stop-color="#14F195"/></linearGradient></defs>
+          </svg>
+        </div>
+        CryptoBoss
+      </div>
+      <p>42+ MCP tools for AI agents. Post-paid $1 USDC on Solana. Zero signup.</p>
+    </div>
+    <div class="fc2">
+      <h4>Product</h4>
+      <a onclick="show('dash')">Live dashboard</a>
+      <a onclick="show('docs')">Documentation</a>
+      <a onclick="show('play')">Playground</a>
+      <a onclick="show('mcp')">MCP setup</a>
+      <a onclick="show('portfolio')">Portfolio</a>
+      <a onclick="show('status')">Status</a>
+      <a onclick="show('keys')">Get API key</a>
+    </div>
+    <div class="fc2">
+      <h4>Resources</h4>
+      <a href="/openapi.yaml">OpenAPI spec</a>
+      <a href="/.well-known/mcp.json">MCP manifest</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="fc2">
+      <h4>Community</h4>
+      <a href="https://github.com/nicebowlofrice/cryptoboss-mcp">GitHub</a>
+      <a href="https://x.com/cryptoboss_api">X (Twitter)</a>
+    </div>
+    <div class="fc2">
+      <h4>Share</h4>
+      <a href="https://twitter.com/intent/tweet?text=Crypto%20API%20for%20AI%20agents%20with%2044%2B%20MCP%20tools%20-%20zero%20signup&url=https://cryptoboss.space" target="_blank" rel="noopener">𝕏 Share on X</a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://cryptoboss.space&title=CryptoBoss%20-%20Crypto%20API%20for%20AI%20Agents" target="_blank" rel="noopener">in Share on LinkedIn</a>
+      <a href="https://news.ycombinator.com/submitlink?u=https://cryptoboss.space&t=CryptoBoss%20-%20Crypto%20API%20for%20AI%20Agents" target="_blank" rel="noopener">Y Share on HN</a>
+      <a href="https://www.reddit.com/submit?url=https://cryptoboss.space&title=CryptoBoss%20-%20Crypto%20API%20for%20AI%20Agents" target="_blank" rel="noopener">/r/ Share on Reddit</a>
+      <a href="https://cryptoboss.space/blog/feed.xml" target="_blank">RSS Feed</a>
+    </div>
+  </div>
+  <div class="fb2">
+    <span>© 2026 CryptoBoss · v34</span>
+    <span>Pay to: <code style="font-family:monospace;font-size:9px">DEXbxp…uZef</code></span>
+  </div>
+</div>
+</footer>
+
+<div class="t" id="toast"></div>
+
+
+<script src="page.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+</body>
+</html>
