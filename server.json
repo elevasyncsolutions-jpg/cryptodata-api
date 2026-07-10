@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "cryptoboss/cryptodata-api",
+  "title": "CryptoBoss",
+  "description": "Crypto API for AI agents with zero-friction MCP. 42+ tools across 10 categories. Post-paid $1 USDC billing on Solana. 11 tools work without any API key.",
+  "version": "3.0.0",
+  "tools": ["register","get_price","get_trending","get_top","get_top_gainers","get_top_losers","get_global","get_categories","get_coin","get_search","get_exchanges","check_usage","get_defi_yields","get_defi_tvl","get_defi_pools","get_defi_protocol","get_meme_scan","get_meme_analyze","get_meme_trending","get_gas","get_gas_all","get_fear_greed","get_summary","get_ohlc","analyze_contract","check_approvals","get_whale_moves","get_token_holders","get_liquidations","get_portfolio_value","get_portfolio_health","set_price_alert","get_alerts","delete_alert","get_arbitrage","get_top_volume","get_social_sentiment","get_network_health","compare_coins","market_correlation","get_stablecoins","trending_categories","get_price_summary"],
+  "transport": "streamableHttp",
+  "url": "https://cryptoboss.space/mcp",
+  "discovery": "https://cryptoboss.space/.well-known/mcp.json",
+  "pricing": "Post-paid $1 USDC on Solana mainnet. Free $1 credit. 11 free tools, no key needed.",
+  "payment": {
+    "type": "post-paid",
+    "currency": "USDC",
+    "chain": "Solana",
+    "wallet": "DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef",
+    "threshold": "$1"
+  },
+  "categories": ["crypto", "data", "defi", "market-data", "blockchain", "web3", "security", "trading"],
+  "keywords": ["crypto API", "MCP", "AI agents", "USDC", "Solana", "DeFi", "cryptocurrency", "market data", "on-chain", "meme coins", "rug check", "price alerts", "zero-friction"],
+  "homepage": "https://cryptoboss.space",
+  "github": "https://github.com/elevasyncsolutions-jpg/cryptodata-api",
+  "llmsTxt": "https://cryptoboss.space/llms.txt",
+  "openapi": "https://cryptoboss.space/openapi.yaml"
+}

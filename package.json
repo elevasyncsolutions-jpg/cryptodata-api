@@ -1,7 +1,7 @@
 {
   "name": "cryptodata-api",
   "version": "3.0.0",
-  "description": "Crypto intelligence MCP server — 21 MCP tools for market data, DeFi, meme coins, on-chain analytics, and sentiment. Post-paid USDC billing on Solana.",
+  "description": "Crypto API for AI agents — 42+ MCP tools across 10 categories. 11 tools work without any API key. Post-paid $1 USDC billing on Solana.",
   "main": "worker-src.js",
   "scripts": {
     "build": "node build.js",
