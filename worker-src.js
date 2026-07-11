@@ -3837,7 +3837,13 @@ while True:
 
 
 if (path === "/sitemap.xml") {
-        const blogUrls = getBlogPosts().map(p => `  <url><loc>https://${url.host}/blog/${p.slug}</loc><priority>0.7</priority></url>`).join('\n');
+        const todayStr = new Date().toISOString().split('T')[0];
+        const featuredRaw = globalEnv?.CRYPTODATA_KV ? await globalEnv.CRYPTODATA_KV.get('auto:featured', 'json') : null;
+        const featuredSlug = featuredRaw && featuredRaw.date === todayStr ? featuredRaw.slug : null;
+        const blogUrls = getBlogPosts().map(p => {
+          const isFeatured = p.slug === featuredSlug;
+          return `  <url><loc>https://${url.host}/blog/${p.slug}</loc>${isFeatured ? `<lastmod>${todayStr}</lastmod>` : ''}<priority>${isFeatured ? '0.9' : '0.7'}</priority></url>`;
+        }).join('\n');
         return new Response(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://${url.host}/</loc><priority>1.0</priority></url>
@@ -3873,9 +3879,16 @@ ${blogUrls}
 
       // ────── BLOG LISTING ──────────────────────────
       if (path === "/blog/" || path === "/blog") {
-        const list = getBlogPosts().map(p => `<div style="margin-bottom:24px;padding:20px;background:#141418;border-radius:8px;border:1px solid #1e1e24">
-          <a href="https://${url.host}/blog/${p.slug}?t=2" style="color:#9945FF;text-decoration:none;font-size:20px;font-weight:600">${p.title}</a>
-          <div style="color:#555;font-size:12px;margin:6px 0">${new Date(p.date).toUTCString().slice(5,16)}</div>
+        const todayStr = new Date().toISOString().split('T')[0];
+        const featuredRaw = globalEnv?.CRYPTODATA_KV ? await globalEnv.CRYPTODATA_KV.get('auto:featured', 'json') : null;
+        const featuredSlug = featuredRaw && featuredRaw.date === todayStr ? featuredRaw.slug : null;
+        const posts = getBlogPosts().map(p => {
+          const isFeatured = p.slug === featuredSlug;
+          return { ...p, displayDate: isFeatured ? todayStr : p.date, isFeatured };
+        });
+        const list = posts.map(p => `<div style="margin-bottom:24px;padding:20px;background:#141418;border-radius:8px;border:1px solid ${p.isFeatured ? '#9945FF' : '#1e1e24'}">
+          ${p.isFeatured ? '<span style="background:#9945FF;color:#fff;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;margin-right:6px">NEW</span>' : ''}<a href="https://${url.host}/blog/${p.slug}?t=2" style="color:#9945FF;text-decoration:none;font-size:20px;font-weight:600">${p.title}</a>
+          <div style="color:#555;font-size:12px;margin:6px 0">${new Date(p.displayDate).toUTCString().slice(5,16)}</div>
           <p style="color:#999;margin:4px 0 0;font-size:14px">${p.desc}</p>
         </div>`).join('\n');
         return new Response(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>CryptoBoss Blog — Crypto API Education for AI Agents</title><meta name="description" content="Learn crypto APIs, DeFi, trading bots, and AI agents. 26 educational guides with tutorials and comparisons."><meta name="robots" content="index,follow"><link rel="canonical" href="https://${url.host}/blog/"></head><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e0e0e0;max-width:720px;margin:0 auto;padding:32px 24px;line-height:1.8"><div style="border-bottom:1px solid #222;padding-bottom:16px;margin-bottom:24px"><a href="https://${url.host}/" style="color:#22c55e;text-decoration:none;font-weight:600">← CryptoBoss</a></div><h1 style="font-size:28px;font-weight:800;color:#fff">CryptoBoss Blog</h1><p style="color:#999;margin-bottom:24px">Educational guides, tutorials, and comparisons for building AI agents with 44+ crypto MCP tools.</p><div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap"><span style="background:rgba(153,69,255,0.1);color:#9945FF;padding:4px 12px;border-radius:12px;font-size:12px">API Guides</span><span style="background:rgba(20,241,149,0.1);color:#14F195;padding:4px 12px;border-radius:12px;font-size:12px">Trading Bots</span><span style="background:rgba(14,165,233,0.1);color:#0EA5E9;padding:4px 12px;border-radius:12px;font-size:12px">DeFi</span><span style="background:rgba(234,179,8,0.1);color:#EAB308;padding:4px 12px;border-radius:12px;font-size:12px">Security</span><span style="background:rgba(255,69,69,0.1);color:#FF4545;padding:4px 12px;border-radius:12px;font-size:12px">AI Agents</span></div>${list}<div style="border-top:1px solid #222;margin-top:32px;padding-top:24px;text-align:center;color:#666;font-size:13px"><p>44+ MCP crypto tools for AI agents. <a href="https://${url.host}/" style="color:#22c55e;text-decoration:none;font-weight:600">Get your free API key →</a></p></div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" } });
@@ -3885,7 +3898,10 @@ ${blogUrls}
         const slug = path.slice(6);
         const post = getBlogPosts().find(p => p.slug === slug);
         if (post) {
-          const blogHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title} — CryptoBoss Blog</title>
+          const todayStr = new Date().toISOString().split('T')[0];
+          const featuredRaw = globalEnv?.CRYPTODATA_KV ? await globalEnv.CRYPTODATA_KV.get('auto:featured', 'json') : null;
+          const isFeatured = featuredRaw && featuredRaw.date === todayStr && featuredRaw.slug === slug;
+          const displayDate = isFeatured ? todayStr : post.date;
       <meta name="description" content="${post.desc}">
       <meta name="robots" content="index,follow">
       <link rel="canonical" href="https://${url.host}/blog/${slug}">
@@ -3898,7 +3914,7 @@ ${blogUrls}
       <meta name="twitter:title" content="${post.title}">
       <meta name="twitter:description" content="${post.desc}">
       <meta name="twitter:image" content="https://${url.host}/blog/images/${slug}.svg">
-      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${post.title.replace(/"/g, '&quot;')}","description":"${post.desc.replace(/"/g, '&quot;')}","url":"https://${url.host}/blog/${slug}","image":"https://${url.host}/blog/images/${slug}.svg","datePublished":"${post.date}","publisher":{"@type":"Organization","name":"CryptoBoss"}}</script></head><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e0e0e0;max-width:720px;margin:0 auto;padding:32px 24px;line-height:1.8"><div style="border-bottom:1px solid #222;padding-bottom:16px;margin-bottom:32px"><a href="https://${url.host}/" style="color:#22c55e;text-decoration:none;font-weight:600">← CryptoBoss</a></div><article>${post.body}</article>
+      <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"${post.title.replace(/"/g, '&quot;')}","description":"${post.desc.replace(/"/g, '&quot;')}","url":"https://${url.host}/blog/${slug}","image":"https://${url.host}/blog/images/${slug}.svg","datePublished":"${displayDate}","publisher":{"@type":"Organization","name":"CryptoBoss"}}</script></head><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e0e0e0;max-width:720px;margin:0 auto;padding:32px 24px;line-height:1.8"><div style="border-bottom:1px solid #222;padding-bottom:16px;margin-bottom:32px"><a href="https://${url.host}/" style="color:#22c55e;text-decoration:none;font-weight:600">← CryptoBoss</a>${isFeatured ? '<span style="background:#9945FF;color:#fff;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;margin-left:12px">NEW</span>' : ''}</div><article>${post.body}</article>
       <div style="display:flex;justify-content:space-between;gap:16px;margin-top:48px;padding-top:24px;border-top:1px solid #222">
         <div style="flex:1;text-align:left;min-width:0">
           ${(() => { const all = getBlogPosts(); const idx = all.findIndex(p => p.slug === slug); const prev = idx > 0 ? all[idx-1] : null; return prev ? `<a href="https://${url.host}/blog/${prev.slug}?t=2" style="color:#fff;text-decoration:none;font-size:16px;line-height:1.5;display:block"><span style="color:#22c55e;font-size:13px;font-weight:600">← Previous</span><br>${prev.title}</a>` : ''; })()}
@@ -4659,6 +4675,7 @@ Cheers,
     await kv.put('auto:index', String(idx + 1));
     await kv.put('auto:lastRun', new Date().toISOString());
     await kv.put('auto:lastPost', JSON.stringify({ slug: post.slug, title: post.title, date: today, hour }));
+    await kv.put('auto:featured', JSON.stringify({ slug: post.slug, title: post.title, date: today }));
 
     // ── Track total runs ──
     const totalRuns = parseInt(await kv.get('auto:totalRuns') || '0');
