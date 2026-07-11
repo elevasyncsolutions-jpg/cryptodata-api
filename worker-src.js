@@ -3902,6 +3902,7 @@ ${blogUrls}
           const featuredRaw = globalEnv?.CRYPTODATA_KV ? await globalEnv.CRYPTODATA_KV.get('auto:featured', 'json') : null;
           const isFeatured = featuredRaw && featuredRaw.date === todayStr && featuredRaw.slug === slug;
           const displayDate = isFeatured ? todayStr : post.date;
+          const blogHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title} — CryptoBoss Blog</title>
       <meta name="description" content="${post.desc}">
       <meta name="robots" content="index,follow">
       <link rel="canonical" href="https://${url.host}/blog/${slug}">
