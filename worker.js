@@ -4553,6 +4553,62 @@ Cheers,
       }
 
       // ────── CRON STATS ─────────────────────────────
+      // ────── DCA BOT ENDPOINTS ──────────────────────
+      if (path === "/api/dca/create" && request.method === "POST") {
+        const key = request.headers.get("x-api-key") || request.headers.get("X-Api-Key");
+        if (!key) return json({ error: "x-api-key required" }, 401);
+        const info = await getKeyInfo(key, true);
+        if (!info) return json({ error: "Invalid API key" }, 403);
+        const kv = env.CRYPTODATA_KV;
+        if (!kv) return json({ error: "KV unavailable" }, 503);
+        try {
+          const body = await request.json();
+          const amount = parseFloat(body.amount_usd);
+          const interval = parseInt(body.interval_hours) || 24;
+          const pair = body.pair || "SOL";
+          if (!amount || amount < 1) return json({ error: "amount_usd must be >= 1" }, 400);
+          const plans = JSON.parse(await kv.get('dca:plans:' + key) || '[]');
+          const plan = { id: 'dca_' + Date.now().toString(36), amount_usd: amount, interval_hours: interval, pair, created: Date.now(), last_exec: 0, active: true };
+          plans.push(plan);
+          await kv.put('dca:plans:' + key, JSON.stringify(plans));
+          return json({ plan, deposit_wallet: PAYMENT.payTo || 'DEXbxpDbbj5AnZSqfAhuftvjrtXwjoWW1PgrxmVjuZef', message: `Send $${amount} USDC to start DCA. Next buy in ${interval}h.` });
+        } catch (e) { return json({ error: "Invalid JSON body" }, 400); }
+      }
+      if (path === "/api/dca/plans") {
+        const key = request.headers.get("x-api-key") || request.headers.get("X-Api-Key");
+        if (!key) return json({ error: "x-api-key required" }, 401);
+        const kv = env.CRYPTODATA_KV;
+        const plans = kv ? JSON.parse(await kv.get('dca:plans:' + key) || '[]') : [];
+        return json({ plans });
+      }
+      if (path === "/api/dca/history") {
+        const key = request.headers.get("x-api-key") || request.headers.get("X-Api-Key");
+        if (!key) return json({ error: "x-api-key required" }, 401);
+        const kv = env.CRYPTODATA_KV;
+        const history = kv ? JSON.parse(await kv.get('dca:history:' + key) || '[]') : [];
+        return json({ history });
+      }
+      // ────── DCA BOT EXECUTION ENDPOINT (called by GitHub Action) ──────
+      if (path === "/api/dca/execute" && request.method === "POST") {
+        const auth = request.headers.get("Authorization");
+        if (auth !== 'Bearer ' + (env.DCA_SECRET || '')) return json({ error: "unauthorized" }, 401);
+        const kv = env.CRYPTODATA_KV;
+        if (!kv) return json({ error: "KV unavailable" }, 503);
+        const data = await request.json();
+        const { key, plan_id, executed_usd, fee_usd, signature, token_out, price } = data;
+        if (!key || !plan_id || !signature) return json({ error: "Missing required fields" }, 400);
+        const plans = JSON.parse(await kv.get('dca:plans:' + key) || '[]');
+        const idx = plans.findIndex(p => p.id === plan_id);
+        if (idx === -1) return json({ error: "Plan not found" }, 404);
+        plans[idx].last_exec = Date.now();
+        plans[idx].exec_count = (plans[idx].exec_count || 0) + 1;
+        await kv.put('dca:plans:' + key, JSON.stringify(plans));
+        const history = JSON.parse(await kv.get('dca:history:' + key) || '[]');
+        history.unshift({ plan_id, executed_usd, fee_usd, signature, token_out, price, time: Date.now() });
+        await kv.put('dca:history:' + key, JSON.stringify(history));
+        return json({ ok: true });
+      }
+
       if (path === "/api/auto/stats") {
         const kv = env.CRYPTODATA_KV;
         const stats = JSON.parse(await kv.get('auto:stats') || '{"runs":0,"articles":0,"pings":0,"backlinks":0}');
