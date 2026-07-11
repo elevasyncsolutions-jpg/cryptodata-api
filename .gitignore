@@ -4,3 +4,5 @@ node_modules/
 *.log
 .DS_Store
 .env
+.env
+dca-bot/node_modules

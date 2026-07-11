@@ -4609,6 +4609,25 @@ Cheers,
         return json({ ok: true });
       }
 
+      // ────── DCA RECORD (called by bot after swap) ──
+      if (path === "/api/dca/record" && request.method === "POST") {
+        const auth = request.headers.get("Authorization");
+        if (auth !== 'Bearer ' + (env.DCA_SECRET || '')) return json({ error: "unauthorized" }, 401);
+        const kv = env.CRYPTODATA_KV;
+        if (!kv) return json({ error: "KV unavailable" }, 503);
+        try {
+          const body = await request.json();
+          const rec = { ...body, time: Date.now() };
+          const history = JSON.parse(await kv.get('dca:global:history') || '[]');
+          history.unshift(rec);
+          await kv.put('dca:global:history', JSON.stringify(history.slice(0, 100)));
+          const total = JSON.parse(await kv.get('dca:global:total') || '{"swaps":0,"volume_usd":0,"fees_usd":0}');
+          total.swaps++; total.volume_usd += parseFloat(body.amount_usd || 0); total.fees_usd += parseFloat(body.fee_usd || 0);
+          await kv.put('dca:global:total', JSON.stringify(total));
+          return json({ ok: true });
+        } catch (e) { return json({ error: e.message }, 400); }
+      }
+
       if (path === "/api/auto/stats") {
         const kv = env.CRYPTODATA_KV;
         const stats = JSON.parse(await kv.get('auto:stats') || '{"runs":0,"articles":0,"pings":0,"backlinks":0}');
