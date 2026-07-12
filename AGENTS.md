@@ -9,7 +9,25 @@ Scale crypto API for real users — MCP distribution, Solana USDC billing, DCA b
 ## Secrets Location
 All API keys, tokens, and recovery codes are stored in `.env` (gitignored).
 
-## Day 6 — 46 MCP Tools, Solana Features Live
+## Day 6 — Financing Department Active
+
+### Wallet Status
+- SOL: **0.001239** (~$0.17) — enough for gas only
+- USDC: **$0.00**
+- **Need ~$0.28 more SOL** to start airdrop farming (wSOL ATA rent: 0.002 SOL)
+
+### DCA Bot
+- Running persistently via launchd (auto-restarts on crash)
+- Polls wallet every 15s for USDC deposits
+- Farm cycle checks hourly — skips until >0.0025 SOL
+- When USDC arrives: auto-swaps → SOL with 0.5% fee
+- Farm log: `dca-bot/farm.log`
+
+### Telegram Bot
+- Webhook handler deployed at `/api/telegram/webhook`
+- Commands: /start, /price, /pump, /analyze, /quote, /alert
+- Cron auto-posts 4x/day to Telegram
+- **BLOCKED**: Need user to create @BotFather bot and set TELEGRAM_BOT_TOKEN
 
 ### MCP Directories
 | Directory | Status | Ref |
