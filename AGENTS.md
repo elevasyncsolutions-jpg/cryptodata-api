@@ -2,20 +2,14 @@
 Scale crypto API for real users — MCP distribution, Solana USDC billing, DCA bot revenue, zero-friction onboarding.
 
 ## Version
-- **Worker**: `6db027cb` → `cryptoboss.space`
+- **Worker**: `afb7df46` → `cryptoboss.space`
 - **KV**: `f5a1cddfd3eb43fcbfa2e7c4884dadab`
 - **IndexNow key**: in `.env`
 
 ## Secrets Location
-All API keys, tokens, and recovery codes are stored in `.env` (gitignored). See `.env` for:
-- Cloudflare API token
-- GitHub PAT (`workflow` scope)
-- npm token + recovery codes
-- Wallet private key
-- DCA_SECRET
-- Test API key
+All API keys, tokens, and recovery codes are stored in `.env` (gitignored).
 
-## Day 5 — Distribution Complete
+## Day 6 — 46 MCP Tools, Solana Features Live
 
 ### MCP Directories
 | Directory | Status | Ref |
@@ -28,28 +22,31 @@ All API keys, tokens, and recovery codes are stored in `.env` (gitignored). See 
 | **AIBase MCP** | ✅ Submitted | — |
 | **Smithery** | ✅ Submitted | — |
 | **mcp.so** | ✅ Issues filed | — |
-| **PulseMCP** | ✅ Will auto-sync from registry | — |
+| **PulseMCP** | ✅ Auto-syncs from registry | — |
 
 ### npm
-- `@mrsscs/cryptoboss-mcp@1.0.1` published with correct `mcpName`
-- `chainboss-cli` deprecated
+- `@mrsscs/cryptoboss-mcp@1.0.1` published
 
-### Revenue Infrastructure
-- DCA bot watches wallet every 15s, auto-swaps USDC ≥ $1 → SOL via Jupiter, 0.5% fee
-- DCA API: `/api/dca/create`, plans, history, record
-- Wallet balance: **$0 USDC**
+### New Solana Tools (3 new MCP + REST)
+| Tool | Endpoint | Price | Free Tier |
+|------|----------|:-----:|:---------:|
+| `get_jupiter_quote` / Jupiter swap quote | `GET /api/swap/quote` | $0.01 | ✅ Free |
+| `get_pump_fun_new` / Pump.fun new tokens | `GET /api/meme/pump-fun/new` | $0.03 | ✅ Free |
+| `analyze_solana_token` / Solana token analysis | `GET /api/solana/analyze` | $0.05 | ❌ Key req |
+
+**Total: 46 MCP tools** (43 original + 3 Solana)
 
 ### Usage
-- Test key: Free plan, $0.35 balance, $0.65 used
+- Test key: Free plan, ~$0.30 balance remaining
 - **Real users: 0** | **Revenue: $0**
 
 ### What's Next
 1. Wait for directory approvals (punkpeye merge, Stork, mcpservers)
-2. PulseMCP auto-syncs from registry
-3. Build next revenue source once distribution channels are live
+2. Build first paid user — Solana trader audience, promote the new Solana rug-check + Jupiter + Pump.fun tools
+3. Consider adding Telegram bot for real-time Pump.fun alerts
 
 ## Key Files
-- `worker-src.js` — main worker source (~4780 lines)
+- `worker-src.js` — main worker source (~4894 lines)
 - `dca-bot/bot.js` — DCA bot (poll chain every 15s)
 - `.env` — secrets (gitignored)
 - `wrangler.toml` — worker config
