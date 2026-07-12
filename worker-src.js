@@ -85,7 +85,7 @@ const PAYMENT = {
 };
 
 const IDX_KEY = '1c5edcdc24f0ba3566c29dfe3f98963a';
-const FREE_PATHS = ["/", "/api/health", "/api/register", "/api/public/market", "/api/pay", "/api/usage", "/api/account", "/api/plans", "/api/upgrade", "/api/network/status", "/api/auto/ping", "/api/auto/thread", "/api/auto/spin", "/api/auto/calendar", "/api/auto/qr", "/api/auto/backlinks", "/api/auto/submit", "/api/auto/stats", "/.well-known/mcp.json", "/mcp", "/llms.txt", "/robots.txt", "/sitemap.xml", "/openapi.yaml", "/blog/feed.xml", "/blog/rss.xml", "/icon.svg", "/blog/", "/blog", "/promo", "/spread", "/parasite", "/auto", "/resources", "/tools/crypto-price-checker"];
+const FREE_PATHS = ["/", "/api/health", "/api/register", "/api/public/market", "/api/pay", "/api/usage", "/api/account", "/api/plans", "/api/upgrade", "/api/network/status", "/api/auto/ping", "/api/auto/thread", "/api/auto/spin", "/api/auto/calendar", "/api/auto/qr", "/api/auto/backlinks", "/api/auto/submit", "/api/auto/stats", "/api/telegram/webhook", "/.well-known/mcp.json", "/mcp", "/llms.txt", "/robots.txt", "/sitemap.xml", "/openapi.yaml", "/blog/feed.xml", "/blog/rss.xml", "/icon.svg", "/blog/", "/blog", "/promo", "/spread", "/parasite", "/auto", "/resources", "/tools/crypto-price-checker"];
 
 function getPrice(path) {
   if (PAYMENT.prices[path]) return PAYMENT.prices[path];
@@ -4741,6 +4741,160 @@ Cheers,
           cycle_progress: `${idx % posts.length}/${posts.length}`,
           timestamp: new Date().toISOString(),
         });
+      }
+
+      // ────── TELEGRAM WEBHOOK ──────────────────────
+      if (path === "/api/telegram/webhook" && request.method === "POST") {
+        const botToken = env.TELEGRAM_BOT_TOKEN;
+        if (!botToken) return json({ error: "Telegram bot not configured" }, 503);
+        try {
+          const body = await request.json();
+          const msg = body.message || body.callback_query?.message || {};
+          const chatId = msg.chat?.id || body.callback_query?.from?.id;
+          const text = (msg.text || "").trim();
+          const from = msg.from || {};
+          if (!chatId || !text) return new Response("ok");
+
+          const send = async (t, opt = {}) => {
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ chat_id: chatId, text: t, parse_mode: "Markdown", ...opt }),
+            }).catch(() => {});
+          };
+
+          if (text === "/start") {
+            const key = await generateKeyAndSave();
+            await send(
+`*CryptoBoss Bot* 🤖 — 46 crypto tools for AI agents
+
+*Your free API key:* \`${key}\`
+*Balance:* \`$1.00\` (100-200 free calls)
+
+*Commands:*
+\`/price bitcoin\` — Get price
+\`/pump\` — New Pump.fun tokens
+\`/alert BTC 70000 above\` — Set price alert
+\`/analyze <mint>\` — Solana token rug check
+\`/quote 1 USDC SOL\` — Jupiter swap quote
+\`/key\` — Show your API key
+
+🔗 https://cryptoboss.space`);
+            return new Response("ok");
+          }
+
+          if (text === "/key") {
+            const key = await generateKeyAndSave();
+            await send(`Your free API key: \`${key}\`\nBalance: $1.00\n\nKeep this safe. Use with x-api-key header or MCP.`);
+            return new Response("ok");
+          }
+
+          const parts = text.split(" ");
+          const cmd = parts[0].toLowerCase();
+
+          if (cmd === "/price" && parts[1]) {
+            const coin = parts[1].toLowerCase();
+            const d = await fetchJSON(`https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd&include_24hr_change=true`);
+            const p = d?.[coin];
+            if (p) {
+              const arrow = p.usd_24h_change > 0 ? "📈" : "📉";
+              await send(`*${coin.toUpperCase()}* ${arrow}\nPrice: \`$${p.usd}\`\n24h: \`${p.usd_24h_change?.toFixed(2) || "N/A"}%\``);
+            } else {
+              await send(`❌ Coin \"${coin}\" not found. Try: bitcoin, ethereum, solana`);
+            }
+            return new Response("ok");
+          }
+
+          if (cmd === "/pump") {
+            const limit = Math.min(parseInt(parts[1]) || 5, 10);
+            let coins;
+            try {
+              const r = await fetch("https://pump.fun/coins?offset=0&limit=" + limit, { headers: { "Accept": "application/json" } });
+              if (r.ok) { const d = await r.json(); const raw = (Array.isArray(d)?d:d?.coins||d?.data||[]).slice(0,limit); coins = raw.map(c=>({n:c.name||c.token?.name||c.mint?.name||"?",s:c.symbol||c.token?.symbol||c.mint?.symbol||"?"})); }
+            } catch {}
+            if (!coins) {
+              try { const r = await fetch("https://api.dexscreener.com/token-profiles/latest/v1"); if(r.ok){const d=await r.json();const raw=(Array.isArray(d)?d:[]).filter(p=>!p.chainId||p.chainId==="solana").slice(0,limit);coins=raw.map(c=>({n:c.tokenAddress?.slice(0,8)+"...",s:"???"}));}} catch{}
+            }
+            if (coins && coins.length > 0) {
+              const list = coins.map((c,i) => `${i+1}. *${c.n}* (${c.s})`).join("\n");
+              await send(`🆕 *New Pump.fun Tokens*\n\n${list}\n\n🔍 Analyze: /analyze <mint>`);
+            } else {
+              await send("❌ No tokens found right now.");
+            }
+            return new Response("ok");
+          }
+
+          if (cmd === "/analyze" && parts[1]) {
+            const mint = parts[1];
+            let accountInfo;
+            try {
+              const r = await fetch("https://solana-rpc.publicnode.com", {
+                method: "POST", headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({jsonrpc:"2.0",id:1,method:"getAccountInfo",params:[mint,{encoding:"jsonParsed"}]}),
+              });
+              if (r.ok) accountInfo = await r.json();
+            } catch {}
+            const parsed = accountInfo?.result?.value?.data?.parsed?.info || {};
+            const errMsg = accountInfo?.error?.message;
+            if (errMsg) {
+              await send(`❌ RPC error: ${errMsg}`);
+            } else if (parsed.decimals !== undefined) {
+              const status = parsed.mintAuthority ? "⚠️ *Mint authority active* — tokens can be minted" : "✅ *Mint authority revoked* (safe)";
+              const freeze = parsed.freezeAuthority ? `⚠️ Freeze authority: \`${parsed.freezeAuthority.slice(0,8)}...\`` : "✅ No freeze authority";
+              await send(`🔍 *Solana Token Analysis*\n\nMint: \`${mint.slice(0,12)}...\`\nDecimals: \`${parsed.decimals}\`\nSupply: \`${(BigInt(parsed.supply||0) / BigInt(10**parsed.decimals)).toString()}\`\n\n${status}\n${freeze}\n\n🔗 https://solscan.io/token/${mint}`);
+            } else {
+              await send("❌ Not a valid SPL token mint address.");
+            }
+            return new Response("ok");
+          }
+
+          if ((cmd === "/quote" || cmd === "/swap") && parts.length >= 3) {
+            const amt = parseFloat(parts[1]);
+            const im = parts[2].toLowerCase() === "usdc" ? "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" : "So11111111111111111111111111111111111111112";
+            const om = parts[3]?.toLowerCase() === "sol" ? "So11111111111111111111111111111111111111112" : "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+            const amount = Math.floor(amt * (im === parts[2]&&parts[2].toLowerCase()==="usdc" ? 1e6 : 1e9));
+            try {
+              const r = await fetch(`https://api.jup.ag/swap/v1/quote?inputMint=${im}&outputMint=${om}&amount=${amount}&slippageBps=50`);
+              if (r.ok) {
+                const q = await r.json();
+                const outAmt = parseFloat(q.outAmount) / (om === "So11111111111111111111111111111111111111112" ? 1e9 : 1e6);
+                const impact = parseFloat(q.priceImpactPct)?.toFixed(3) || "N/A";
+                await send(`*Swap Quote*\n\n${amt} ${parts[2].toUpperCase()} → ${outAmt.toFixed(6)} ${parts[3]?.toUpperCase() || "SOL"}\nPrice impact: ${impact}%\nRoutes: ${q.routePlan?.length || 0}`);
+              } else {
+                await send("❌ No route found for this pair.");
+              }
+            } catch {
+              await send("❌ Quote fetch failed.");
+            }
+            return new Response("ok");
+          }
+
+          if (cmd === "/alert" && parts.length >= 3) {
+            const coin = parts[1].toLowerCase();
+            const target = parseFloat(parts[2]);
+            const cond = parts[3]?.toLowerCase() === "below" ? "below" : "above";
+            if (!target) { await send("Usage: /alert bitcoin 70000 above"); return new Response("ok"); }
+            try {
+              const pd = await fetchJSON(`https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`);
+              const current = pd?.[coin]?.usd;
+              if (!current) { await send(`❌ Coin \"${coin}\" not found.`); return new Response("ok"); }
+              const alertId = "tg_" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+              const alert = { id: alertId, coin, condition: cond, target, current_price: current, created: Date.now(), chat_id: chatId, triggered: false };
+              const kv = env.CRYPTODATA_KV;
+              if (kv) {
+                const existing = await kv.get('alerts:anon','json')||[];
+                existing.push(alert);
+                await kv.put('alerts:anon', JSON.stringify(existing));
+              }
+              await send(`✅ *Alert Set*\n\n${coin.toUpperCase()} ${cond} $${target}\nCurrent: $${current}\n\nI'll notify you when it triggers.`);
+            } catch { await send("❌ Failed to set alert."); }
+            return new Response("ok");
+          }
+
+          await send(`Unknown command. Try:\n/price bitcoin\n/pump\n/analyze <mint>\n/quote 1 USDC SOL\n/alert bitcoin 70000`);
+          return new Response("ok");
+        } catch (e) {
+          return new Response("ok");
+        }
       }
 
       // ────── HEALTH ────────────────────────────────
